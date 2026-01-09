@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { ArrowUpRight, Check, Send } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import styles from './Contact.module.css';
+import FloatingParticles from '../components/Effects/FloatingParticles';
 
 const services = [
   'Web Development',
@@ -22,18 +23,107 @@ const budgets = [
   '$60k+'
 ];
 
+const CustomDropdown = ({ 
+  options, 
+  value, 
+  onChange, 
+  placeholder, 
+  label 
+}: { 
+  options: string[], 
+  value: string, 
+  onChange: (val: string) => void, 
+  placeholder: string,
+  label: string
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className={styles.inputGroup} style={{ marginBottom: 0 }}>
+      {/* Label floats if value exists or menu is open */}
+      <span className={`${styles.customLabel} ${(value || isOpen) ? styles.active : ''}`}>
+        {label}
+      </span>
+      
+      <div 
+        className={styles.customSelectTrigger} 
+        onClick={() => setIsOpen(!isOpen)}
+        tabIndex={0}
+        onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+      >
+        {value || <span className={styles.placeholder}>{placeholder}</span>}
+        <motion.span 
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.2 }}
+          style={{ marginLeft: 'auto', opacity: 0.5 }}
+        >
+          ▼
+        </motion.span>
+      </div>
+
+      <motion.div 
+        className={styles.customOptions}
+        initial={false}
+        animate={isOpen ? "open" : "closed"}
+        variants={{
+          open: { opacity: 1, pointerEvents: "auto", y: 0, display: "block" },
+          closed: { opacity: 0, pointerEvents: "none", y: -10, transitionEnd: { display: "none" } }
+        }}
+        transition={{ duration: 0.2 }}
+      >
+        {options.map((option) => (
+          <div 
+            key={option} 
+            className={styles.optionItem}
+            onClick={() => {
+              onChange(option);
+              setIsOpen(false);
+            }}
+          >
+            {option}
+          </div>
+        ))}
+      </motion.div>
+    </div>
+  );
+};
+
+// Magnetic Component Helper
+const MagneticButton = ({ children, onClick, disabled }: { children: React.ReactNode, onClick?: () => void, disabled?: boolean }) => {
+  const ref = useRef<HTMLButtonElement>(null);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+
+  const handleMouse = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    const { height, width, left, top } = ref.current!.getBoundingClientRect();
+    const middleX = clientX - (left + width / 2);
+    const middleY = clientY - (top + height / 2);
+    setPosition({ x: middleX * 0.2, y: middleY * 0.2 });
+  };
+
+  const reset = () => setPosition({ x: 0, y: 0 });
+
+  return (
+    <motion.button
+      ref={ref}
+      className={styles.submitButton}
+      onMouseMove={handleMouse}
+      onMouseLeave={reset}
+      animate={{ x: position.x, y: position.y }}
+      transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+      onClick={onClick}
+      disabled={disabled}
+      type="submit"
+    >
+      {children}
+    </motion.button>
+  );
+};
+
 export default function ContactPage() {
   const { theme } = useTheme();
-  const heroRef = useRef(null);
-  
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["start start", "end start"]
-  });
-  
-  const titleY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
+  // ... form state ...
   const [formState, setFormState] = useState({
     name: '',
     email: '',
@@ -45,77 +135,99 @@ export default function ContactPage() {
 
   const [focusedField, setFocusedField] = useState<string | null>(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
-
   const isValid = formState.name && formState.email && formState.message;
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormState({ ...formState, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!isValid) return;
-    setTimeout(() => setIsSubmitted(true), 500);
+    setTimeout(() => setIsSubmitted(true), 800);
   };
 
   return (
     <main className={styles.page}>
-      {/* ===== HERO SECTION ===== */}
-      <section className={styles.hero} ref={heroRef}>
-        <motion.div style={{ y: titleY, opacity }} className={styles.heroContent}>
-          <span className={styles.label}>Get in Touch</span>
-          <h1 className={styles.heroTitle}>
-            Let's Create<br/>
-            <span className={styles.outline}>Something</span><br/>
-            Extraordinary
-          </h1>
-        </motion.div>
-        
-        <div className={styles.scrollIndicator}>
-          <span>Scroll</span>
-          <div className={styles.scrollLine} />
-        </div>
-      </section>
+      
+      {/* Creative Background Effect */}
+      <div className={styles.ambientLight} />
 
-      {/* ===== SPLIT SECTION ===== */}
-      <section className={styles.splitSection}>
-        {/* LEFT - Info Panel */}
-        <div className={styles.infoPanel}>
-          <div className={styles.infoBlock}>
-            <h3>New Business</h3>
-            <a href="mailto:hello@zlaark.com">hello@zlaark.com</a>
+      <div className={styles.container}>
+        {/* LEFT - Visual & Info */}
+        <div className={styles.leftPanel}>
+          {/* Particles constrained to left panel area */}
+          <div className={styles.particlesContainer}>
+             <FloatingParticles count={20} />
           </div>
-          
-          <div className={styles.infoBlock}>
-            <h3>Location</h3>
-            <p>Global / Amritsar, IN</p>
+
+          <div className={styles.headerContent}>
+            <motion.span 
+              className={styles.label}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              Get in Touch
+            </motion.span>
+            
+            <h1 className={styles.heroTitle}>
+              <motion.div initial={{ y: '100%', opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}>
+                Let's Create
+              </motion.div>
+              <motion.div 
+                className={styles.outline}
+                initial={{ y: '100%', opacity: 0 }} 
+                animate={{ y: 0, opacity: 1 }} 
+                transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+              >
+                Something
+              </motion.div>
+              <motion.div 
+                className={styles.highlight}
+                initial={{ y: '100%', opacity: 0 }} 
+                animate={{ y: 0, opacity: 1 }} 
+                transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              >
+                Extraordinary
+              </motion.div>
+            </h1>
           </div>
-          
-          <div className={styles.infoBlock}>
-            <h3>Follow Us</h3>
-            <div className={styles.socialLinks}>
-              <a href="#" className={styles.socialLink}>LinkedIn <ArrowUpRight size={14} /></a>
-              <a href="#" className={styles.socialLink}>Twitter <ArrowUpRight size={14} /></a>
-              <a href="#" className={styles.socialLink}>Instagram <ArrowUpRight size={14} /></a>
+
+          <motion.div 
+            className={styles.contactDetails}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.5, duration: 1 }}
+          >
+            <div className={styles.infoBlock}>
+              <h3>New Business</h3>
+              <a href="mailto:hello@zlaark.com" className={styles.magneticLink}>hello@zlaark.com</a>
             </div>
-          </div>
+            
+            <div className={styles.infoBlock}>
+              <h3>Socials</h3>
+              <div className={styles.socialLinks}>
+                <a href="#" className={styles.socialLink}>LinkedIn <ArrowUpRight size={14} /></a>
+                <a href="#" className={styles.socialLink}>Twitter <ArrowUpRight size={14} /></a>
+              </div>
+            </div>
+          </motion.div>
         </div>
 
         {/* RIGHT - Form Panel */}
-        <div className={styles.formPanel}>
+        <div className={styles.rightPanel}>
           {!isSubmitted ? (
             <motion.form 
               className={styles.form}
               onSubmit={handleSubmit}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <p className={styles.formIntro}>
-                Tell us about your project and we'll get back to you within 24 hours.
-              </p>
+              <h2 className={styles.formHeader}>Project Inquiry</h2>
 
+              {/* ... Inputs ... */}
               {/* Name & Email Row */}
               <div className={styles.formRow}>
                 <div className={styles.inputGroup}>
@@ -170,32 +282,25 @@ export default function ContactPage() {
                 <span className={styles.inputLine} />
               </div>
 
-              {/* Service & Budget Row */}
+              {/* Custom Selects Row */}
               <div className={styles.formRow}>
-                <div className={styles.selectGroup}>
-                  <select
-                    name="service"
-                    id="service"
-                    value={formState.service}
-                    onChange={handleChange}
-                  >
-                    <option value="">Select Service</option>
-                    {services.map(s => <option key={s} value={s}>{s}</option>)}
-                  </select>
-                  <span className={styles.inputLine} />
+                <div style={{ flex: 1 }}>
+                  <CustomDropdown 
+                     options={services}
+                     value={formState.service}
+                     onChange={(val) => setFormState(s => ({ ...s, service: val }))}
+                     placeholder="Select Service"
+                     label="Service Interest"
+                  />
                 </div>
-                
-                <div className={styles.selectGroup}>
-                  <select
-                    name="budget"
-                    id="budget"
-                    value={formState.budget}
-                    onChange={handleChange}
-                  >
-                    <option value="">Budget Range</option>
-                    {budgets.map(b => <option key={b} value={b}>{b}</option>)}
-                  </select>
-                  <span className={styles.inputLine} />
+                <div style={{ flex: 1 }}>
+                  <CustomDropdown 
+                     options={budgets}
+                     value={formState.budget}
+                     onChange={(val) => setFormState(s => ({ ...s, budget: val }))}
+                     placeholder="Select Range"
+                     label="Budget Range"
+                  />
                 </div>
               </div>
 
@@ -217,17 +322,12 @@ export default function ContactPage() {
                 <span className={styles.inputLine} />
               </div>
 
-              {/* Submit */}
-              <motion.button
-                type="submit"
-                className={styles.submitButton}
-                disabled={!isValid}
-                whileHover={isValid ? { x: 5 } : {}}
-                whileTap={isValid ? { scale: 0.98 } : {}}
-              >
+              {/* Magnetic Submit Button */}
+              <MagneticButton disabled={!isValid}>
                 <span>Send Message</span>
                 <Send size={18} />
-              </motion.button>
+              </MagneticButton>
+
             </motion.form>
           ) : (
             <motion.div 
@@ -252,7 +352,7 @@ export default function ContactPage() {
             </motion.div>
           )}
         </div>
-      </section>
+      </div>
     </main>
   );
 }
