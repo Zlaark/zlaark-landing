@@ -1,0 +1,241 @@
+.page {
+  background: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+}
+
+/* ===== HERO ===== */
+.hero {
+  padding: 15rem var(--page-padding) 5rem;
+  position: relative;
+}
+
+.heroLabel {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 0.4em;
+  margin-bottom: 2rem;
+  display: block;
+}
+
+.heroTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(4rem, 11vw, 8rem);
+  font-weight: 400;
+  margin-bottom: 2rem;
+  line-height: 0.9;
+}
+
+.heroSubtitle {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  color: var(--text-muted);
+  max-width: 500px;
+}
+
+/* ===== CONTACT GRID ===== */
+.contactSection {
+  padding: 5rem var(--page-padding) 15rem;
+}
+
+.contactGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 8rem;
+}
+
+/* ===== INFO SIDE ===== */
+.infoSide {
+  padding-top: 2rem;
+}
+
+.infoBlock {
+  margin-bottom: 4rem;
+}
+
+.infoLabel {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.infoValue {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  line-height: 1.4;
+  font-weight: 400;
+}
+
+.infoValue a {
+  color: var(--text-color);
+  text-decoration: none;
+  position: relative;
+}
+
+.infoValue a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0%;
+  height: 1px;
+  background: var(--text-color);
+  transition: width 0.3s;
+}
+
+.infoValue a:hover::after {
+  width: 100%;
+}
+
+.socialLinks {
+  display: flex;
+  gap: 2rem;
+  margin-top: 5rem;
+}
+
+.socialLink {
+  width: 60px;
+  height: 60px;
+  border: 1px solid var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  transition: all 0.3s;
+}
+
+.socialLink:hover {
+  border-color: var(--accent-color);
+  color: var(--accent-color);
+  transform: translateY(-5px) rotate(45deg);
+}
+
+/* ===== FORM SIDE ===== */
+.formSide {
+  background: transparent;
+  padding: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.formLabel {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 1rem;
+}
+
+.formInput,
+.formTextarea,
+.formSelect {
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--border-color);
+  border-radius: 0;
+  padding: 1rem 0;
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--text-color);
+  transition: border-color 0.3s;
+}
+
+.formInput:focus,
+.formTextarea:focus,
+.formSelect:focus {
+  outline: none;
+  border-color: var(--accent-color);
+}
+
+.formInput::placeholder,
+.formTextarea::placeholder {
+  color: var(--text-muted);
+  opacity: 0.3;
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+}
+
+.formTextarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.formSelect {
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0 center;
+}
+
+.submitButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2rem 3rem;
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 0;
+  color: var(--text-color);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin-top: 2rem;
+}
+
+.submitButton:hover {
+  background: var(--accent-color);
+  border-color: var(--accent-color);
+  color: #000;
+}
+
+@media (max-width: 1024px) {
+  .contactGrid {
+    grid-template-columns: 1fr;
+    gap: 5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroTitle {
+    font-size: 3.5rem;
+  }
+
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .formInput,
+  .formSelect {
+    font-size: 1.2rem;
+  }
+}

@@ -1,0 +1,136 @@
+.main {
+  min-height: 100vh;
+  background: #050505;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  position: relative;
+  overflow-x: hidden;
+}
+
+.glow {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.05), transparent 70%);
+  top: -200px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  width: 100%;
+  max-width: 600px;
+  position: relative;
+  z-index: 2;
+}
+
+.header {
+  margin-bottom: 4rem;
+  text-align: center;
+}
+
+.label {
+  font-family: var(--font-body);
+  color: var(--accent-color);
+  text-transform: uppercase;
+  letter-spacing: 0.2rem;
+  font-size: 0.8rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  color: #fff;
+  font-weight: 400;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.inputLabel {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.input,
+.textarea,
+.select {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 1.2rem;
+  color: #fff;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  outline: none;
+  transition: all 0.3s;
+}
+
+.input:focus,
+.textarea:focus,
+.select:focus {
+  border-color: var(--accent-color);
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.1);
+}
+
+.textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+.submitBtn {
+  margin-top: 2rem;
+  background: var(--accent-color);
+  color: #000;
+  border: none;
+  padding: 1.5rem;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 600;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.submitBtn:hover {
+  background: #e5c155;
+  /* Slightly lighter gold */
+  transform: translateY(-2px);
+}
+
+.backLink {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  color: #666;
+  text-decoration: none;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-size: 0.8rem;
+  transition: color 0.3s;
+  z-index: 10;
+}
+
+.backLink:hover {
+  color: #fff;
+}

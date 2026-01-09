@@ -1,0 +1,242 @@
+.section {
+  padding: 0 var(--page-padding);
+  background: var(--bg-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* HEADER */
+.sectionHeader {
+  width: 100%;
+  margin-bottom: 3rem;
+  padding-top: 5rem;
+  /* Add spacing from top */
+  position: relative;
+  z-index: 10;
+}
+
+.label {
+  font-family: var(--font-body);
+  color: var(--accent-color);
+  font-size: 0.8rem;
+  letter-spacing: 0.3rem;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+}
+
+.sectionTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: var(--text-color);
+  line-height: 1.1;
+  font-weight: 400;
+}
+
+/* FLUID GRID CONTAINER */
+.gridContainer {
+  width: 100%;
+  height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+
+.row {
+  display: flex;
+  width: 100%;
+  overflow: hidden;
+  /* height set inline */
+}
+
+@media (max-width: 768px) {
+  .gridContainer {
+    height: auto !important;
+    flex-direction: column;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .row {
+    flex-direction: column;
+    height: auto !important;
+  }
+
+  .cell {
+    width: 100% !important;
+    height: 300px;
+    /* Fixed height for mobile cells */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .title {
+    font-size: 2rem;
+    white-space: normal;
+  }
+
+  .desc {
+    opacity: 1;
+    /* Always show description on mobile */
+    transform: none;
+    max-width: 100%;
+  }
+
+  .crosshair {
+    display: none;
+    /* Hide crosshair on mobile */
+  }
+
+  .sectionHeader {
+    padding-top: 2rem;
+    margin-bottom: 2rem;
+  }
+}
+
+/* Touch Device Refinement (iPad Landscape, etc.) */
+@media (hover: none) and (min-width: 769px) {
+  .crosshair {
+    display: none;
+  }
+
+  /* Force static 50/50 split if the JS doesn't handle touch optimally */
+  /* Note: The JS spring logic might still run, but we can visualy simplify */
+  .desc {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.cell {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: var(--card-bg);
+  transition: background 0.3s;
+  /* width set inline */
+}
+
+/* BORDERS between cells are handled by the container/row logic or careful borders.
+   To make it look like a crosshair, we can use borders on the cells.
+*/
+
+.cellInner {
+  position: absolute;
+  inset: 0;
+  padding: 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Background Texture */
+.texture {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.5s;
+  background-size: cover;
+  background-position: center;
+  filter: grayscale(100%) brightness(0.5);
+  z-index: 0;
+}
+
+.cell:hover .texture,
+.cell.active .texture {
+  opacity: 1;
+}
+
+/* THEME COLORS for Texture Gradients */
+.themeRed {
+  background: linear-gradient(135deg, #2a0000, #000);
+}
+
+.themeCyan {
+  background: linear-gradient(135deg, #001a1f, #000);
+}
+
+.themeGold {
+  background: linear-gradient(135deg, #2a2200, #000);
+}
+
+.themePurple {
+  background: linear-gradient(135deg, #1a0024, #000);
+}
+
+/* CONTENT */
+.header {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.index {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.icon {
+  color: #fff;
+  opacity: 0.5;
+}
+
+.footer {
+  position: relative;
+  z-index: 2;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4vw, 4rem);
+  color: #fff;
+  margin-bottom: 1rem;
+  line-height: 1;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.desc {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  max-width: 300px;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s ease;
+}
+
+.cell:hover .desc,
+.cell.active .desc {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* CROSSHAIR DECO */
+.crosshair {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  margin-top: -10px;
+  pointer-events: none;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.crosshairCenter {
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  border-radius: 50%;
+}

@@ -1,0 +1,99 @@
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.linesContainer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.line {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  transform-origin: left;
+}
+
+.content {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  width: 100%;
+}
+
+.wordContainer {
+  height: 120px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.wordText {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  line-height: 1;
+}
+
+.progressWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 250px;
+}
+
+.progressTrack {
+  width: 100%;
+  height: 2px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progressFill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  transform-origin: left;
+}
+
+.progressText {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.progressNumber {
+  font-family: var(--font-heading);
+  font-size: 1.2rem;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.1em;
+}
+
+.progressPercent {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+}
+
+.revealMask {
+  position: absolute;
+  top: 0;
+  width: 50%;
+  height: 100%;
+  z-index: 100;
+}

@@ -1,0 +1,86 @@
+.section {
+  padding: 4rem 0;
+  background: var(--bg-color);
+  border-bottom: 1px solid var(--border-color);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.label {
+  font-family: var(--font-body);
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  letter-spacing: 0.2rem;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+
+.marquee {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  position: relative;
+}
+
+.marquee::before,
+.marquee::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 15rem;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.marquee::before {
+  left: 0;
+  background: linear-gradient(to right, var(--bg-color), transparent);
+}
+
+.marquee::after {
+  right: 0;
+  background: linear-gradient(to left, var(--bg-color), transparent);
+}
+
+.track {
+  display: inline-flex;
+  animation: scroll 30s linear infinite;
+  gap: 6rem;
+  padding-left: 6rem;
+}
+
+.logoItem {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--text-color);
+  text-transform: uppercase;
+  letter-spacing: 0.1rem;
+  transition: color 0.3s;
+  cursor: default;
+}
+
+.logoItem:hover {
+  color: var(--accent-color);
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (max-width: 768px) {
+  .logoItem {
+    font-size: 1.5rem;
+  }
+
+  .track {
+    gap: 4rem;
+  }
+}

@@ -1,0 +1,95 @@
+.hero {
+  min-height: 100vh;
+  /* iOS Safari fix for full height */
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: var(--page-padding);
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.contentWrapper {
+  position: relative;
+  z-index: 5;
+  mix-blend-mode: overlay;
+  /* Blends text with the gold fog - text visible only in spotlight */
+}
+
+/* Light mode strategy: CSS Mask 
+   Text is black (opaque). Mask hides it everywhere except the spotlight.
+   We use the CSS vars --spot-x/y updated by the canvas loop.
+*/
+[data-theme="light"] .contentWrapper {
+  mix-blend-mode: normal;
+  /* Mask: Visible (black) at center, Transparent at edges */
+  /* Increased radius to 650px to allow reading full text line */
+  mask-image: radial-gradient(circle 650px at var(--spot-x, 50%) var(--spot-y, 50%), black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(circle 650px at var(--spot-x, 50%) var(--spot-y, 50%), black 30%, transparent 100%);
+  will-change: mask-image, -webkit-mask-image;
+}
+
+.headline {
+  font-size: clamp(3rem, 8vw, 6rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--text-color);
+  margin-bottom: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.italic {
+  font-family: var(--font-heading);
+  font-style: italic;
+  font-weight: 400;
+  text-transform: lowercase;
+  display: inline-block;
+  transform: translateY(-5px);
+  margin: 0 0.5rem;
+}
+
+.subheadline {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  letter-spacing: 0.2rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-top: 2rem;
+}
+
+.nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 2rem var(--page-padding);
+  display: flex;
+  justify-content: space-between;
+  mix-blend-mode: difference;
+  z-index: 10;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.1rem;
+}
+
+@media (max-width: 768px) {
+  .headline {
+    font-size: clamp(2.5rem, 10vw, 4rem);
+    margin-bottom: 3rem;
+  }
+
+  .subheadline {
+    font-size: 0.8rem;
+    letter-spacing: 0.15rem;
+  }
+
+  .nav {
+    padding: 1.5rem var(--page-padding);
+    font-size: 0.7rem;
+  }
+}
