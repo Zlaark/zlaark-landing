@@ -1,159 +1,206 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, Code, Palette, Smartphone, ShoppingBag, Layers, Zap } from 'lucide-react';
-import FloatingParticles from '../components/Effects/FloatingParticles';
-import { useTheme } from '../context/ThemeContext';
+import { Palette, Code, Smartphone, ShoppingBag, Layers, Hexagon, ArrowRight } from 'lucide-react';
 import styles from './Services.module.css';
 
 const services = [
   {
+    id: 'design',
+    num: '01',
     icon: Palette,
-    title: 'Brand & Web Design',
-    desc: 'Strategic visual identities and immersive web experiences that captivate your audience.',
-    features: ['Visual Identity Systems', 'UI/UX Design', 'Motion Design', 'Design Systems'],
-    color: '#d4af37',
+    title: 'Brand & Identity',
+    subtitle: 'Visual Language',
+    desc: 'Cutting through the noise. We craft visual identities that are not just seen, but felt. From logo systems to motion guidelines.',
+    tags: ['Strategy', 'Visual Identity', 'Typography', 'Motion'],
+    color: '#d4af37', // Gold
+    gradient: 'linear-gradient(135deg, #1a1a1a 0%, #000 100%)'
   },
   {
+    id: 'web',
+    num: '02',
     icon: Code,
-    title: 'Web Development',
-    desc: 'High-performance websites built with cutting-edge technologies for speed and scalability.',
-    features: ['Next.js / React', 'WordPress / Headless CMS', 'E-Commerce Platforms', 'API Integration'],
-    color: '#8b5cf6',
+    title: 'Web Engineering',
+    subtitle: 'Next-Gen Platforms',
+    desc: 'Building the unbuildable. We architect high-performance, immersive web platforms using bleeding-edge stack technologies.',
+    tags: ['Next.js', 'WebGL', 'Three.js', 'Headless CMS'],
+    color: '#8b5cf6', // Purple
+    gradient: 'linear-gradient(135deg, #1a1a1a 0%, #1c1030 100%)'
   },
   {
+    id: 'app',
+    num: '03',
     icon: Smartphone,
-    title: 'Mobile Applications',
-    desc: 'Native and cross-platform apps that deliver seamless experiences on every device.',
-    features: ['React Native / Expo', 'iOS & Android', 'App Store Optimization', 'Push Notifications'],
-    color: '#06b6d4',
+    title: 'Mobile Ecosystems',
+    subtitle: 'iOS & Android',
+    desc: 'Native performance, cross-platform efficiency. We build mobile applications that feel like an extension of the OS.',
+    tags: ['React Native', 'Expo', 'Store Optimization', 'Haptics'],
+    color: '#06b6d4', // Cyan
+    gradient: 'linear-gradient(135deg, #1a1a1a 0%, #082f36 100%)'
   },
   {
+    id: 'commerce',
+    num: '04',
     icon: ShoppingBag,
-    title: 'E-Commerce Solutions',
-    desc: 'Conversion-optimized storefronts that turn browsers into buyers.',
-    features: ['Shopify / WooCommerce', 'Custom Checkout', 'Payment Integration', 'Inventory Management'],
-    color: '#10b981',
+    title: 'Digital Commerce',
+    subtitle: 'Revenue Engines',
+    desc: 'Storefronts engineered to convert. We blend aesthetic appeal with consumer psychology to maximize AOV.',
+    tags: ['Shopify Plus', 'Custom Checkout', 'Payment Integrations', 'CRO'],
+    color: '#10b981', // Green
+    gradient: 'linear-gradient(135deg, #1a1a1a 0%, #062b1e 100%)'
   },
   {
+    id: 'strategy',
+    num: '05',
     icon: Layers,
     title: 'Product Strategy',
-    desc: 'Research-backed strategy that aligns your digital presence with business goals.',
-    features: ['Market Research', 'User Personas', 'Competitive Analysis', 'Roadmapping'],
-    color: '#f59e0b',
-  },
-  {
-    icon: Zap,
-    title: 'Performance & SEO',
-    desc: 'Optimization that ensures your digital assets load fast and rank high.',
-    features: ['Core Web Vitals', 'Technical SEO', 'Analytics Setup', 'Speed Optimization'],
-    color: '#ef4444',
-  },
+    subtitle: 'Market Intelligence',
+    desc: 'Data-driven roadmaps. We analyze market gaps and position your product to dominate its sector from day one.',
+    tags: ['Market Analysis', 'User Personas', 'MVP Planning', 'Growth'],
+    color: '#f59e0b', // Amber
+    gradient: 'linear-gradient(135deg, #1a1a1a 0%, #2b1c04 100%)'
+  }
 ];
 
-const process = [
-  { step: '01', title: 'Discovery', desc: 'We dive deep into your brand, market, and objectives.' },
-  { step: '02', title: 'Strategy', desc: 'A tailored roadmap that aligns design with business goals.' },
-  { step: '03', title: 'Design', desc: 'Pixel-perfect designs that balance form and function.' },
-  { step: '04', title: 'Development', desc: 'Clean, scalable code that brings designs to life.' },
-  { step: '05', title: 'Launch', desc: 'Rigorous testing and seamless deployment.' },
-  { step: '06', title: 'Optimize', desc: 'Continuous improvement based on real data.' },
-];
+// Individual Card Component
+const ServiceCard = ({ 
+  data, 
+  index, 
+  progress, 
+  range, 
+  targetScale 
+}: { 
+  data: typeof services[0]; 
+  index: number; 
+  progress: MotionValue<number>;
+  range: [number, number];   targetScale: number;
+}) => {
+  const container = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ['start end', 'start start']
+  });
+  
+  // Scale down the card range: 1 -> targetScale
+  // This animates as the NEXT cards scroll up to cover it
+  const scale = useTransform(progress, range, [1, targetScale]);
+  
+  // Fade image or content slightly as it gets covered
+  const brightness = useTransform(progress, range, [1, 0.4]);
 
-export default function ServicesPage() {
-  const { theme } = useTheme();
-  const particleColor = theme === 'light' ? 'rgba(212, 175, 55, 0.5)' : 'rgba(212, 175, 55, 0.2)';
+  // Entrance animation for content
+  const contentY = useTransform(scrollYProgress, [0, 1], [100, 0]);
+  const contentOpacity = useTransform(scrollYProgress, [0.3, 0.6], [0, 1]);
 
   return (
-    <main className={styles.page}>
-      {/* ===== HERO ===== */}
-      <section className={styles.hero}>
-        <FloatingParticles count={20} color={particleColor} />
+    <div ref={container} className={styles.cardWrapper}>
+        <motion.div 
+            className={styles.card}
+            style={{ 
+                scale, 
+                backgroundColor: data.color, 
+                top: `calc(5vh + ${index * 25}px)`, 
+            }}
+        >
+            <motion.div 
+                className={styles.cardInner}
+                style={{ background: data.gradient }}
+            >
+                {/* Visual Half (Right on Desktop, Bg on Mobile) */}
+                <div className={styles.visualContainer}>
+                     <div className={styles.visualOverlay} />
+                     <motion.div 
+                        className={styles.visualIcon}
+                        style={{ y: useTransform(scrollYProgress, [0, 1], [0, -50]) }}
+                     >
+                        <data.icon size={200} strokeWidth={0.5} color={data.color} style={{ opacity: 0.15 }} />
+                     </motion.div>
+                </div>
+
+                {/* Content Half */}
+                <div className={styles.contentContainer}>
+                    <div className={styles.headerRow}>
+                        <span className={styles.index}>{data.num}</span>
+                        <div className={styles.iconBox} style={{ borderColor: `${data.color}40`, color: data.color }}>
+                            <data.icon size={24} />
+                        </div>
+                    </div>
+
+                    <h2 className={styles.title}>
+                        {data.title.split(" ").map((word, i) => (
+                            <span key={i} className={styles.word}>{word}</span>
+                        ))}
+                    </h2>
+                    
+                    <p className={styles.description}>{data.desc}</p>
+
+                    <div className={styles.tags}>
+                         {data.tags.map((tag) => (
+                             <span key={tag} className={styles.tag} style={{ borderColor: `${data.color}20` }}>
+                                 <Hexagon size={10} fill={data.color} stroke="none" />
+                                 {tag}
+                             </span>
+                         ))}
+                    </div>
+
+                    <Link href="/contact" className={styles.ctaButton} style={{ background: data.color }} data-cursor="Let's Go">
+                        Start Project <ArrowRight size={18} color="#000"/>
+                    </Link>
+                </div>
+            </motion.div>
+
+            {/* Dimming Overlay for Stack Effect */}
+            <motion.div 
+                className={styles.dimLayer}
+                style={{ opacity: targetScale === 1 ? 0 : useTransform(progress, range, [0, 0.6]) }} 
+            />
+
+        </motion.div>
+    </div>
+  );
+};
+
+export default function ServicesPage() {
+  const container = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: container,
+    offset: ['start start', 'end end']
+  });
+
+  return (
+    <main ref={container} className={styles.main}>
         
-        <motion.div
-          className={styles.heroContent}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className={styles.heroLabel}>Capabilities</span>
-          <h1 className={styles.heroTitle}>Services That Transform</h1>
-          <p className={styles.heroSubtitle}>
-            End-to-end digital solutions crafted to elevate your brand and drive results.
-          </p>
-        </motion.div>
-      </section>
+        {/* Intro Section - Standard Scroll */}
+        <section className={styles.intro}>
+            <h1 className={styles.introTitle}>Services</h1>
+            <p className={styles.introDesc}>Digital solutions engineered for dominance.</p>
+        </section>
 
-      {/* ===== SERVICES GRID ===== */}
-      <section className={styles.servicesSection}>
-        <div className={styles.servicesGrid}>
-          {services.map((service, i) => (
-            <motion.div
-              key={i}
-              className={styles.serviceCard}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
-            >
-              <div className={styles.serviceIcon} style={{ color: service.color }}>
-                <service.icon size={40} strokeWidth={1} />
-              </div>
-              <h3 className={styles.serviceTitle}>{service.title}</h3>
-              <p className={styles.serviceDesc}>{service.desc}</p>
-              <ul className={styles.serviceFeatures}>
-                {service.features.map((f, j) => (
-                  <li key={j}>{f}</li>
-                ))}
-              </ul>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ===== PROCESS ===== */}
-      <section className={styles.processSection}>
-        <div className={styles.sectionHeader}>
-          <span className={styles.sectionLabel}>How We Work</span>
-          <h2 className={styles.sectionTitle}>Our Process</h2>
-        </div>
-
-        <div className={styles.processGrid}>
-          {process.map((item, i) => (
-            <motion.div
-              key={i}
-              className={styles.processCard}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.08 }}
-            >
-              <span className={styles.processStep}>{item.step}</span>
-              <h4 className={styles.processTitle}>{item.title}</h4>
-              <p className={styles.processDesc}>{item.desc}</p>
-            </motion.div>
-          ))}
-        </div>
-      </section>
-
-      {/* ===== CTA ===== */}
-      <section className={styles.ctaSection}>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <h2 className={styles.ctaTitle}>Let's Discuss Your Project</h2>
-          <p className={styles.ctaText}>
-            Every great partnership starts with a conversation.
-          </p>
-          <Link href="/book" className={styles.ctaButton}>
-            Schedule a Consultation
-            <ArrowRight size={18} />
-          </Link>
-        </motion.div>
-      </section>
+        {/* Stacked Cards Section */}
+        <section className={styles.stackSection}>
+            {services.map((service, i) => {
+                // Logic: Only scale down if there are cards AFTER this one
+                const isLast = i === services.length - 1;
+                const targetScale = isLast ? 1 : 1 - ( (services.length - i) * 0.05 );
+                // Dimming shouldn't happen for last card
+                
+                return (
+                    <ServiceCard 
+                        key={i} 
+                        index={i} 
+                        data={service}
+                        range={[i * 0.25, 1]} 
+                        targetScale={targetScale} 
+                        progress={scrollYProgress} 
+                    />
+                );
+            })}
+        </section>
+        
+        {/* Outro / Spacing */}
+        <div className={styles.spacer} />
     </main>
   );
 }
