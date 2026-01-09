@@ -69,7 +69,7 @@ export default function RootLayout({
       <body className={`${cinzel.variable} ${inter.variable}`}>
         <ThemeProvider>
           <CustomCursor />
-          <CinematicGrain />
+          {/* <CinematicGrain /> */}
           {/* <ThemeToggle /> */}
           <Navbar />
           <PageWrapper>
