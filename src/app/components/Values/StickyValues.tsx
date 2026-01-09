@@ -76,7 +76,7 @@ const Card = ({ item, activeId, setActiveId }: { item: any, activeId: number | n
         >
             {/* Layers */}
             <div className={styles.silkLayer} />
-            <div className={styles.grain} />
+            {/* <div className={styles.grain} /> */}
             <div className={styles.sheen} />
 
             <div className={styles.cardInner}>
