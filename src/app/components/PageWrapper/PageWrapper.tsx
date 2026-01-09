@@ -1,19 +1,21 @@
 'use client';
 
-import { useState } from 'react';
-import { motion, AnimatePresence, useScroll, useVelocity, useTransform, useSpring } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import CreativeLoader from '../Preloader/CreativeLoader';
 
 
 export default function PageWrapper({ children }: { children: React.ReactNode }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const pathname = usePathname();
+  // Check session flag immediately to avoid flash
+  const [isLoading, setIsLoading] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return !sessionStorage.getItem('zlaark_genesis_loader');
+    }
+    return true;
+  });
   
-  // Warp Drive Physics removed to fix position: sticky
-  // const { scrollY } = useScroll();
-  // const scrollVelocity = useVelocity(scrollY);
-  // ...
+  const pathname = usePathname();
 
   const handlePreloaderComplete = () => {
     setIsLoading(false);
@@ -21,17 +23,18 @@ export default function PageWrapper({ children }: { children: React.ReactNode })
 
   return (
     <>
-      <CreativeLoader onComplete={handlePreloaderComplete} />
+      {/* Only render loader if actually loading */}
+      {isLoading && <CreativeLoader onComplete={handlePreloaderComplete} />}
 
       <AnimatePresence mode="wait">
         {!isLoading && (
           <motion.div
             key={pathname}
-            initial={{ opacity: 0, y: 40 }} // Start lower for more dramatic lift
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -40 }}
+            exit={{ opacity: 0, y: -20 }}
             transition={{ 
-              duration: 0.8, // Slower, expensive feel 
+              duration: 0.5,
               ease: [0.22, 1, 0.36, 1] 
             }}
             style={{ width: '100%' }}

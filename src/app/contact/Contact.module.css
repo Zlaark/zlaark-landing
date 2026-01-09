@@ -1,260 +1,309 @@
+/* Contact Page: Modern Split-Screen Editorial */
+
 .page {
+  background: #050505;
+  color: #fff;
   min-height: 100vh;
   width: 100%;
-  background: #050505;
+}
+
+/* ===== HERO SECTION ===== */
+.hero {
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: relative;
-  overflow: hidden;
-  padding: 8rem 2rem 4rem;
-}
-
-/* Animated Gradient Background */
-.gradientBg {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
-    radial-gradient(ellipse at 80% 80%, rgba(100, 50, 150, 0.08) 0%, transparent 40%);
-  animation: gradientShift 15s ease-in-out infinite alternate;
-  pointer-events: none;
-}
-
-@keyframes gradientShift {
-  0% {
-    opacity: 0.5;
-    transform: scale(1) translateY(0);
-  }
-
-  100% {
-    opacity: 1;
-    transform: scale(1.1) translateY(-5%);
-  }
-}
-
-.container {
-  width: 100%;
-  max-width: 1200px;
-  position: relative;
-  z-index: 10;
-}
-
-.pageHeader {
-  position: absolute;
-  top: -8rem;
-  /* Moved up more to fit larger text/line */
-  left: 0;
-  width: 100%;
   text-align: center;
-  font-family: var(--font-heading);
-  /* Changed to Heading font */
-  font-size: 3rem;
-  /* Much larger */
+  padding: 0 2rem;
+}
+
+.heroContent {
+  max-width: 1200px;
+}
+
+.label {
+  display: inline-block;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: rgba(255, 255, 255, 0.2);
-  /* Slightly more subtle opacity for large text */
+  letter-spacing: 0.3em;
+  color: var(--accent-color);
+  margin-bottom: 2rem;
+  padding: 0.5rem 1.5rem;
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 50px;
+}
+
+.heroTitle {
+  font-family: var(--font-heading);
+  font-size: clamp(3.5rem, 10vw, 8rem);
+  line-height: 0.95;
+  font-weight: 400;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+.outline {
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255, 255, 255, 0.4);
+}
+
+.scrollIndicator {
+  position: absolute;
+  bottom: 3rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2rem;
+  gap: 1rem;
 }
 
-.pageHeader::after {
-  content: '';
+.scrollIndicator span {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.scrollLine {
   width: 1px;
-  height: 4rem;
-  /* Longer line */
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+  height: 60px;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.4), transparent);
+  animation: scrollPulse 2s ease-in-out infinite;
 }
 
-/* ===== THE FORM SENTENCE ===== */
-.form {
-  width: 100%;
+@keyframes scrollPulse {
+
+  0%,
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: scaleY(0.7);
+  }
 }
 
-.formLine {
+/* ===== SPLIT SECTION ===== */
+.splitSection {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  min-height: 100vh;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Left Info Panel */
+.infoPanel {
+  padding: 6rem 4rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  margin-bottom: 0.25rem;
-  font-family: var(--font-heading);
-  font-size: 2rem;
-  line-height: 2;
-  color: rgba(255, 255, 255, 0.3);
+  flex-direction: column;
+  justify-content: center;
+  gap: 4rem;
+}
+
+.infoBlock h3 {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 1rem;
   font-weight: 400;
 }
 
-.sentence {
+.infoBlock a,
+.infoBlock p {
   font-family: var(--font-heading);
-  font-size: 2rem;
-  line-height: 2.2;
-  color: rgba(255, 255, 255, 0.3);
-  font-weight: 400;
+  font-size: 1.5rem;
+  color: #fff;
+  text-decoration: none;
   margin: 0;
-}
-
-.text {
-  display: inline;
   transition: color 0.3s;
 }
 
-/* On hover, slightly brighten surrounding text? Maybe distracting. Keep simple. */
-
-.inputWrapper {
-  display: inline-flex;
-  flex-direction: column;
-  vertical-align: baseline;
-  /* Align with text baseline */
-  position: relative;
-  margin: 0 0.5rem;
+.infoBlock a:hover {
+  color: var(--accent-color);
 }
 
-/* Common Styles for Input and Select */
-.input,
-.select {
+.socialLinks {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.socialLink {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s;
+}
+
+.socialLink:hover {
+  color: var(--accent-color);
+  transform: translateX(5px);
+}
+
+/* Right Form Panel */
+.formPanel {
+  padding: 6rem 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.form {
+  width: 100%;
+  max-width: 600px;
+}
+
+.formIntro {
+  font-family: var(--font-body);
+  font-size: 1.1rem;
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+.formRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Input Group with Floating Label */
+.inputGroup {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.inputGroup input,
+.inputGroup textarea {
+  width: 100%;
   background: transparent;
   border: none;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-  font-family: var(--font-heading);
-  font-size: 2rem;
-  /* Match formLine size */
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem 0;
+  font-family: var(--font-body);
+  font-size: 1rem;
   color: #fff;
-  /* Active input is bright white */
-  padding: 0;
-  margin: 0;
   outline: none;
-  min-width: 250px;
-  /* Base width */
-  text-align: center;
-  cursor: text;
   transition: border-color 0.3s;
 }
 
-/* Placeholder styling */
-/* Custom Select Styles */
-.customSelectWrapper {
-  position: relative;
-  display: inline-flex;
-  flex-direction: column;
-  margin: 0 0.5rem;
-  vertical-align: baseline;
+.inputGroup input:focus,
+.inputGroup textarea:focus {
+  border-color: var(--accent-color);
 }
 
-.selectTrigger {
-  background: transparent;
-  border: none;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
-  font-family: var(--font-heading);
-  font-size: 2rem;
-  color: var(--accent-color);
-  padding: 0 1.5rem 0 0.5rem;
-  cursor: pointer;
-  text-align: center;
-  /* Custom dropdown arrow */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right rem center;
-  min-width: 200px;
-}
-
-.selectTrigger.empty {
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.dropdown {
+.inputGroup label {
   position: absolute;
-  top: 100%;
   left: 0;
-  width: 100%;
-  min-width: 250px;
-  background: rgba(10, 10, 10, 0.95);
-  border: 1px solid rgba(212, 175, 55, 0.2);
-  border-radius: 4px;
-  padding: 0.5rem 0;
-  list-style: none;
-  z-index: 50;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-  backdrop-filter: blur(10px);
-  max-height: 300px;
-  overflow-y: auto;
-}
-
-.dropdownItem {
-  padding: 0.75rem 1.5rem;
+  top: 1rem;
   font-family: var(--font-body);
   font-size: 1rem;
-  color: rgba(255, 255, 255, 0.8);
-  cursor: pointer;
-  transition: all 0.2s;
-  text-align: left;
+  color: rgba(255, 255, 255, 0.4);
+  pointer-events: none;
+  transition: all 0.3s ease;
 }
 
-.dropdownItem:hover {
-  background: rgba(212, 175, 55, 0.1);
+.inputGroup label.active {
+  top: -0.75rem;
+  font-size: 0.75rem;
   color: var(--accent-color);
-  padding-left: 2rem;
-  /* Slide effect */
 }
 
-/* Select specifics */
-/* Removed native select styles */
-
-/* Animated Underline */
-.underline {
+.inputLine {
   position: absolute;
   bottom: 0;
   left: 0;
-  width: 0%;
+  width: 0;
   height: 2px;
   background: var(--accent-color);
   transition: width 0.4s ease;
 }
 
-.underline[data-active="true"] {
+.inputGroup input:focus~.inputLine,
+.inputGroup textarea:focus~.inputLine {
   width: 100%;
 }
 
-/* ===== SUBMIT BUTTON ===== */
-.submitWrapper {
-  margin-top: 4rem;
-  display: flex;
-  justify-content: flex-end;
-  /* Align right or center? Center feels majestic. */
-  justify-content: center;
+/* Select Group */
+.selectGroup {
+  position: relative;
 }
 
-.submitButton {
-  background: var(--accent-color);
-  color: #000;
+.selectGroup select {
+  width: 100%;
+  background: transparent;
   border: none;
-  padding: 1.5rem 3rem;
-  border-radius: 100px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 1rem 0;
   font-family: var(--font-body);
-  font-size: 1.25rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.6);
+  outline: none;
   cursor: pointer;
-  display: flex;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right center;
+  transition: border-color 0.3s, color 0.3s;
+}
+
+.selectGroup select:focus {
+  border-color: var(--accent-color);
+  color: #fff;
+}
+
+.selectGroup select option {
+  background: #111;
+  color: #fff;
+}
+
+/* Submit Button */
+.submitButton {
+  display: inline-flex;
   align-items: center;
   gap: 1rem;
-  transition: transform 0.2s;
+  background: transparent;
+  border: 1px solid var(--accent-color);
+  color: var(--accent-color);
+  padding: 1.25rem 2.5rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  cursor: pointer;
+  margin-top: 2rem;
+  transition: all 0.3s;
 }
 
 .submitButton:hover:not(:disabled) {
-  transform: scale(1.05);
+  background: var(--accent-color);
+  color: #000;
 }
 
-/* ===== SUCCESS STATE ===== */
-.successMessage {
+.submitButton:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* Success State */
+.successState {
   text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.5rem;
+  padding: 4rem;
 }
 
 .successIcon {
@@ -266,159 +315,87 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto 2rem;
+}
+
+.successState h2 {
+  font-family: var(--font-heading);
+  font-size: 2.5rem;
   margin-bottom: 1rem;
 }
 
-.successMessage h2 {
-  font-family: var(--font-heading);
-  font-size: 3rem;
-  color: #fff;
-}
-
-.successMessage p {
+.successState p {
   font-family: var(--font-body);
-  font-size: 1.2rem;
   color: rgba(255, 255, 255, 0.6);
+  margin-bottom: 2rem;
 }
 
-.resetBtn {
-  margin-top: 2rem;
+.resetButton {
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: #fff;
   padding: 0.75rem 1.5rem;
-  border-radius: 50px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
   cursor: pointer;
-  font-family: var(--font-body);
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
-  transition: background 0.3s;
+  transition: all 0.3s;
 }
 
-.resetBtn:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* ===== CONTACT FOOTER (Micro) ===== */
-.contactInfoFooter {
-  position: absolute;
-  bottom: 2rem;
-  left: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 0 3rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding-top: 2rem;
-  opacity: 0.5;
-}
-
-.footerItem {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.footerItem span {
-  font-family: var(--font-body);
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.5);
-  letter-spacing: 0.1em;
-}
-
-.footerItem a,
-.footerItem p {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  color: #fff;
-  text-decoration: none;
-}
-
-.socials {
-  display: flex;
-  gap: 1rem;
+.resetButton:hover {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
+  .splitSection {
+    grid-template-columns: 1fr;
+  }
 
-  .sentence,
-  .input,
-  .select {
-    font-size: 2rem;
+  .infoPanel {
+    padding: 4rem 2rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 3rem;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .infoBlock {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  .socialLinks {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .formPanel {
+    padding: 4rem 2rem;
   }
 }
 
 @media (max-width: 768px) {
-  .page {
-    justify-content: flex-start;
-    padding-top: 12rem;
-    /* Increased to clear the overlapping header */
-    height: auto;
-    overflow-y: auto;
+  .heroTitle {
+    font-size: 3rem;
   }
 
-  /* Scale down the big header on mobile */
-  .pageHeader {
-    top: -5rem;
-    /* Move down so it sits BELOW the logo/navbar space */
-    font-size: 2rem;
+  .formRow {
+    grid-template-columns: 1fr;
+    gap: 0;
   }
 
-  .pageHeader::after {
-    height: 3rem;
-    /* Longer line to push form down */
-  }
-
-  .sentence,
-  .input,
-  .select {
-    font-size: 1.1rem;
-    /* Further reduced from 1.35rem */
-    line-height: 2;
-  }
-
-  .inputWrapper {
-    margin: 0.75rem 0;
-    /* More vertical space between inputs */
-    width: 100%;
-  }
-
-  .input,
-  .select {
-    width: 100%;
-    min-width: 0;
-    text-align: left;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  .container {
-    padding-bottom: 4rem;
-  }
-
-  .contactInfoFooter {
-    position: relative;
+  .infoPanel {
     flex-direction: column;
-    gap: 2rem;
-    margin-top: 4rem;
-    text-align: center;
-    align-items: center;
+    text-align: left;
+    align-items: flex-start;
   }
 
-  /* Hide the line break on mobile, let it flow */
-  .desktopBreak {
-    display: none;
-  }
-
-  .submitButton {
-    padding: 1rem 2rem;
-    /* Reduced padding */
-    font-size: 1rem;
-    /* Smaller font */
-    width: auto;
-    white-space: nowrap;
-    /* Prevent wrapping */
+  .socialLinks {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

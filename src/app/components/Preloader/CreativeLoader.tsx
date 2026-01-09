@@ -13,20 +13,21 @@ export default function CreativeLoader({ onComplete }: { onComplete: () => void 
   const [showDirect, setShowDirect] = useState(false);
 
   useEffect(() => {
-    // Session Check
-    // const hasSeen = sessionStorage.getItem('zlaark_genesis_loader');
-    // if (hasSeen) {
-    //   setShowDirect(true);
-    //   onComplete();
-    //   return;
-    // }
+    // Session Check - Skip loader if user has already seen it in this session
+    const hasSeen = sessionStorage.getItem('zlaark_genesis_loader');
+    if (hasSeen) {
+      // Immediately complete without showing loader
+      onComplete();
+      return;
+    }
+    
     sessionStorage.setItem('zlaark_genesis_loader', 'true');
 
-    // Sequence Timing
-    const lineTimer = setTimeout(() => setPhase('logo'), 1000); // Draw line for 1s
-    const decodeTimer = setTimeout(() => setPhase('decode'), 2000); // Start text decode
-    const exitTimer = setTimeout(() => setPhase('exit'), 4000); // Start exit
-    const completeTimer = setTimeout(onComplete, 5000); // Fully done
+    // Sequence Timing - Only runs on first visit
+    const lineTimer = setTimeout(() => setPhase('logo'), 1000);
+    const decodeTimer = setTimeout(() => setPhase('decode'), 2000);
+    const exitTimer = setTimeout(() => setPhase('exit'), 4000);
+    const completeTimer = setTimeout(onComplete, 5000);
 
     return () => {
       clearTimeout(lineTimer);
