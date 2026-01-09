@@ -35,16 +35,25 @@ export const metadata: Metadata = {
   openGraph: {
     title: "ZLAARK | Crafting Digital Legacies",
     description: "Award-winning digital agency specializing in high-end web design, mobile apps, and e-commerce.",
-    url: "https://zlaark.com", // Placeholder URL
+    url: "https://zlaark.com",
     siteName: "Zlaark",
     locale: "en_US",
     type: "website",
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'ZLAARK - Crafting Digital Legacies',
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "ZLAARK | Crafting Digital Legacies",
     description: "Award-winning digital agency specializing in high-end web design, mobile apps, and e-commerce.",
-    creator: "@zlaark", // Placeholder
+    creator: "@zlaark",
+    images: ['/og-image.png'],
   },
   robots: {
     index: true,
@@ -69,7 +78,7 @@ export default function RootLayout({
       <body className={`${cinzel.variable} ${inter.variable}`}>
         <ThemeProvider>
           <CustomCursor />
-          <CinematicGrain />
+          {/* <CinematicGrain /> */}
           {/* <ThemeToggle /> */}
           <Navbar />
           <PageWrapper>

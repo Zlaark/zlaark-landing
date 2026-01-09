@@ -29,7 +29,7 @@ const FogMesh = ({ isDarkMode }: { isDarkMode: boolean }) => {
     uniforms.uIsDarkMode.value = isDarkMode ? 1.0 : 0.0;
   }, [isDarkMode, uniforms]);
 
-  useFrame((state) => {
+  useFrame((state, delta) => {
     if (meshRef.current) {
       uniforms.uTime.value = state.clock.getElapsedTime();
       
@@ -47,19 +47,14 @@ const FogMesh = ({ isDarkMode }: { isDarkMode: boolean }) => {
         uniforms.uMouse.value.y += (targetY - uniforms.uMouse.value.y) * 0.12;
       }
 
-      // Update CSS variables for text masking (in percent)
-      // Mirroring the shader coordinate system where center is 0.5, 0.5
-      // Shader UVS: 0,0 bottom-left, 1,1 top-right
-      // CSS Mask: 0% 0% top-left, 100% 100% bottom-right
-      
-      // Need to convert shader coords (uMouse) back to screen coords for CSS
-      // uMouse.x: 0 (left) -> 1 (right)
-      // uMouse.y: 0 (bottom) -> 1 (top)
-      const cssX = uniforms.uMouse.value.x * 100;
-      const cssY = (1.0 - uniforms.uMouse.value.y) * 100; // Invert Y for CSS
-      
-      document.body.style.setProperty('--spot-x', `${cssX}%`);
-      document.body.style.setProperty('--spot-y', `${cssY}%`);
+      // Throttle CSS variable updates (every 3rd frame ~20fps is enough for CSS)
+      const frameCount = Math.floor(state.clock.getElapsedTime() * 60);
+      if (frameCount % 3 === 0) {
+        const cssX = uniforms.uMouse.value.x * 100;
+        const cssY = (1.0 - uniforms.uMouse.value.y) * 100;
+        document.body.style.setProperty('--spot-x', `${cssX}%`);
+        document.body.style.setProperty('--spot-y', `${cssY}%`);
+      }
     }
   });
 

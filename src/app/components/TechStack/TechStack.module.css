@@ -89,6 +89,8 @@
   padding: 2rem;
   transition: transform 0.3s, border-color 0.3s, background-color 0.3s;
   overflow: hidden;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .card:hover {

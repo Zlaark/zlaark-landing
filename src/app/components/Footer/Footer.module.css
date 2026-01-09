@@ -117,6 +117,8 @@
   height: 100%;
   animation: rotateText 10s linear infinite;
   pointer-events: none;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 @keyframes rotateText {

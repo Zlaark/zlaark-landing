@@ -1,168 +1,318 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
-import FloatingParticles from '../components/Effects/FloatingParticles';
 import styles from './Work.module.css';
 
-const categories = ['All', 'Web', 'E-Commerce', 'Mobile App', 'Branding'];
-
-const projects = [
+// Expanded Dataset
+const allProjects = [
   {
     id: 'venture-core',
     title: 'Venture Core',
     category: 'Web',
-    description: 'A sleek fintech platform for next-gen investors.',
-    image: 'https://picsum.photos/id/20/800/500',
+    year: '2024',
+    image: 'https://picsum.photos/id/20/1200/900',
+    color: '#1a1a2e',
   },
   {
     id: 'nebula-stream',
     title: 'Nebula Stream',
-    category: 'Mobile App',
-    description: 'Cross-platform streaming experience for music lovers.',
-    image: 'https://picsum.photos/id/26/800/500',
+    category: 'Mobile',
+    year: '2024',
+    image: 'https://picsum.photos/id/26/1200/900',
+    color: '#16213e',
   },
   {
     id: 'apex-health',
     title: 'Apex Health',
     category: 'Web',
-    description: 'Healthcare portal with patient-first design.',
-    image: 'https://picsum.photos/id/39/800/500',
+    year: '2023',
+    image: 'https://picsum.photos/id/39/1200/900',
+    color: '#0f3460',
   },
   {
     id: 'lumina-gallery',
     title: 'Lumina Gallery',
     category: 'E-Commerce',
-    description: 'Art marketplace connecting creators and collectors.',
-    image: 'https://picsum.photos/id/48/800/500',
+    year: '2023',
+    image: 'https://picsum.photos/id/48/1200/900',
+    color: '#1a1a2e',
   },
   {
     id: 'quant-x',
     title: 'Quant X',
     category: 'Web',
-    description: 'Analytics dashboard for institutional traders.',
-    image: 'https://picsum.photos/id/56/800/500',
+    year: '2023',
+    image: 'https://picsum.photos/id/56/1200/900',
+    color: '#16213e',
   },
   {
     id: 'urbanscape',
     title: 'Urbanscape',
     category: 'Branding',
-    description: 'Complete brand identity for urban development firm.',
-    image: 'https://picsum.photos/id/65/800/500',
+    year: '2022',
+    image: 'https://picsum.photos/id/65/1200/900',
+    color: '#0f3460',
   },
+  {
+    id: 'nova-systems',
+    title: 'Nova Systems',
+    category: 'Web',
+    year: '2022',
+    image: 'https://picsum.photos/id/76/1200/900',
+    color: '#2a2a2a',
+  },
+  {
+    id: 'echo-audio',
+    title: 'Echo Audio',
+    category: 'Mobile',
+    year: '2022',
+    image: 'https://picsum.photos/id/88/1200/900',
+    color: '#333',
+  },
+  {
+    id: 'zenith-fashion',
+    title: 'Zenith Fashion',
+    category: 'E-Commerce',
+    year: '2021',
+    image: 'https://picsum.photos/id/99/1200/900',
+    color: '#000',
+  }
 ];
 
-const featuredProject = {
-  id: 'venture-core',
-  title: 'Venture Core',
-  category: 'Featured Case Study',
-  description: 'A complete digital transformation for a leading fintech startup. We redesigned their platform from the ground up, resulting in a 340% increase in user engagement and $2M in Series A funding.',
-  image: 'https://picsum.photos/id/20/1200/750',
+const categories = ['All', 'Web', 'Mobile', 'E-Commerce', 'Branding'];
+
+// --- Text Scramble Effect ---
+const ScrambleText = ({ text, isActive }: { text: string; isActive: boolean }) => {
+  const [display, setDisplay] = useState(text);
+  const chars = '!<>-_\\/[]{}—=+*^?#';
+
+  useEffect(() => {
+    if (!isActive) {
+      setDisplay(text);
+      return;
+    }
+
+    let interval: NodeJS.Timeout;
+    let iteration = 0;
+
+    interval = setInterval(() => {
+      setDisplay(
+        text
+          .split('')
+          .map((char, index) => {
+            if (index < iteration) return text[index];
+            return chars[Math.floor(Math.random() * chars.length)];
+          })
+          .join('')
+      );
+
+      if (iteration >= text.length) clearInterval(interval);
+      iteration += 1 / 3;
+    }, 30);
+
+    return () => clearInterval(interval);
+  }, [isActive, text]);
+
+  return <span>{display}</span>;
 };
 
-export default function WorkPage() {
-  const [activeFilter, setActiveFilter] = useState('All');
-  const { theme } = useTheme();
-  const particleColor = theme === 'light' ? 'rgba(212, 175, 55, 0.5)' : 'rgba(212, 175, 55, 0.2)';
+// --- Sliced Image Component ---
+const SlicedImage = ({ src, alt }: { src: string; alt: string }) => {
+  const slices = 5;
 
-  const filteredProjects = activeFilter === 'All' 
-    ? projects 
-    : projects.filter(p => p.category === activeFilter);
+  return (
+    <div className={styles.slicedWrapper}>
+      <div 
+        className={styles.staticBg}
+        style={{ backgroundImage: `url(${src})` }} 
+      />
+      
+      {[...Array(slices)].map((_, i) => (
+        <motion.div
+          key={i}
+          className={styles.slice}
+          initial={{ y: '-100%' }}
+          animate={{ y: '0%' }}
+          exit={{ y: '100%' }}
+          transition={{
+            duration: 0.8,
+            ease: [0.22, 1, 0.36, 1],
+            delay: i * 0.08,
+          }}
+          style={{
+            left: `${(i / slices) * 100}%`,
+            width: `${100 / slices}%`,
+            backgroundImage: `url(${src})`,
+            backgroundPosition: `${(i / (slices - 1)) * 100}% center`,
+            backgroundSize: `${slices * 100}% 100%`,
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
+
+export default function WorkPage() {
+  const [activeCategory, setActiveCategory] = useState('All');
+  const [activeId, setActiveId] = useState(allProjects[0].id);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const { theme } = useTheme();
+
+  // Filter projects
+  const filteredProjects = useMemo(() => {
+    return activeCategory === 'All' 
+        ? allProjects 
+        : allProjects.filter(p => p.category === activeCategory);
+  }, [activeCategory]);
+
+  // Ensure activeId is valid when filtering
+  useEffect(() => {
+    if (!filteredProjects.find(p => p.id === activeId)) {
+        if (filteredProjects.length > 0) {
+            setActiveId(filteredProjects[0].id);
+        }
+    }
+  }, [activeCategory, filteredProjects, activeId]);
+
+  const activeProject = filteredProjects.find(p => p.id === activeId) || filteredProjects[0];
 
   return (
     <main className={styles.page}>
-      {/* ===== HERO ===== */}
-      <section className={styles.hero}>
-        <FloatingParticles count={20} color={particleColor} />
+      <div className={styles.splitContainer}>
         
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className={styles.heroLabel}>Portfolio</span>
-          <h1 className={styles.heroTitle}>Our Work Speaks</h1>
-          <p className={styles.heroSubtitle}>
-            A curated collection of digital experiences that define industries.
-          </p>
-        </motion.div>
-      </section>
+        {/* LEFT PANEL - Scrollable List */}
+        <div className={styles.leftPanel}>
+          <div className={styles.leftHeader}>
+            <div className={styles.headerTop}>
+                 <span className={styles.labelSmall}>Selected Works</span>
+                 <span className={styles.projectCount}>
+                    {filteredProjects.length} Projects
+                 </span>
+            </div>
+            
+            {/* Filter Bar */}
+            <div className={styles.filterBar}>
+                {categories.map((cat) => (
+                    <button 
+                        key={cat}
+                        className={`${styles.filterBtn} ${activeCategory === cat ? styles.filterBtnActive : ''}`}
+                        onClick={() => setActiveCategory(cat)}
+                    >
+                        {cat}
+                        {activeCategory === cat && (
+                            <motion.div className={styles.filterLine} layoutId="filterLine" />
+                        )}
+                    </button>
+                ))}
+            </div>
+          </div>
 
-      {/* ===== FILTERS ===== */}
-      <section className={styles.filterSection}>
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            className={`${styles.filterButton} ${activeFilter === cat ? styles.active : ''}`}
-            onClick={() => setActiveFilter(cat)}
-          >
-            {cat}
-          </button>
-        ))}
-      </section>
+          <motion.div className={styles.scrollArea} data-lenis-prevent layoutScroll>
+             <nav className={styles.projectList}>
+                <AnimatePresence mode="wait">
+                    {/* Key changes on filter to trigger re-render of list animation */}
+                    <motion.div 
+                        key={activeCategory}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                    >
+                    {filteredProjects.map((project, index) => (
+                    <motion.div
+                        key={project.id}
+                        className={`${styles.projectItem} ${activeId === project.id ? styles.active : ''}`}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: index * 0.05 }}
+                        onMouseEnter={() => setHoveredId(project.id)}
+                        onMouseLeave={() => setHoveredId(null)}
+                    >
+                        <div 
+                           className={styles.projectLink} 
+                           onClick={() => setActiveId(project.id)}
+                        >
+                        <span className={styles.projectIndex}>
+                            {String(index + 1).padStart(2, '0')}
+                        </span>
+                        <span className={styles.projectTitle}>
+                            <ScrambleText text={project.title} isActive={hoveredId === project.id || activeId === project.id} />
+                        </span>
+                        </div>
+                        
+                        {/* Active Scanner Line - No layoutId to prevent scroll reset */}
+                        <motion.div 
+                            className={styles.activeScanner}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: activeId === project.id ? 1 : 0 }}
+                            transition={{ duration: 0.2 }}
+                        />
+                    </motion.div>
+                    ))}
+                    </motion.div>
+                </AnimatePresence>
+             </nav>
+          </motion.div>
 
-      {/* ===== PROJECT GRID ===== */}
-      <section className={styles.projectsSection}>
-        <motion.div className={styles.projectGrid} layout>
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project, i) => (
-              <motion.div
-                key={project.id}
-                className={styles.projectCard}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ delay: i * 0.05 }}
-              >
-                <Link href={`/work/${project.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <div className={styles.projectImage}>
-                    <img src={project.image} alt={project.title} />
-                    <div className={styles.projectOverlay}>
-                      <ArrowUpRight size={32} color="#fff" />
-                    </div>
-                  </div>
-                  <div className={styles.projectInfo}>
-                    <span className={styles.projectCategory}>{project.category}</span>
-                    <h3 className={styles.projectTitle}>{project.title}</h3>
-                    <p className={styles.projectDesc}>{project.description}</p>
-                  </div>
+          {/* Project Details Footer */}
+          {activeProject && (
+            <motion.div 
+                className={styles.projectDetails}
+                key={activeProject.id} // Re-animates on change
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3 }}
+            >
+                <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>Client</span>
+                    <span className={styles.detailValue}>{activeProject.title}</span>
+                </div>
+                <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>Industry</span>
+                    <span className={styles.detailValue}>{activeProject.category}</span>
+                </div>
+                <div className={styles.detailItem}>
+                    <span className={styles.detailLabel}>Year</span>
+                    <span className={styles.detailValue}>{activeProject.year}</span>
+                </div>
+                <Link href={`/work/${activeProject.id}`} className={styles.viewLink}>
+                    View Case Study <ArrowUpRight size={16} />
                 </Link>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
-      </section>
+            </motion.div>
+          )}
+        </div>
 
-      {/* ===== FEATURED CASE STUDY ===== */}
-      <section className={styles.featuredSection}>
-        <motion.div
-          className={styles.featuredCard}
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <div className={styles.featuredImage}>
-            <img 
-              src={featuredProject.image} 
-              alt={featuredProject.title}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          </div>
-          <div className={styles.featuredContent}>
-            <span className={styles.featuredLabel}>{featuredProject.category}</span>
-            <h2 className={styles.featuredTitle}>{featuredProject.title}</h2>
-            <p className={styles.featuredDesc}>{featuredProject.description}</p>
-            <Link href={`/work/${featuredProject.id}`} className={styles.featuredButton}>
-              View Case Study
-              <ArrowRight size={16} />
-            </Link>
-          </div>
-        </motion.div>
-      </section>
+        {/* RIGHT PANEL - Sticky Canvas */}
+        <div className={styles.rightPanel}>
+          <AnimatePresence mode="popLayout">
+            {activeProject && (
+                <motion.div 
+                    key={activeProject.id}
+                    className={styles.imageContainer}
+                    initial={{ opacity: 1 }}
+                    exit={{ opacity: 1 }}
+                >
+                <SlicedImage src={activeProject.image} alt={activeProject.title} />
+                
+                <div className={styles.overlayContent}>
+                    <motion.h2 
+                            className={styles.bigTitle}
+                            initial={{ clipPath: 'inset(100% 0 0 0)' }}
+                            animate={{ clipPath: 'inset(0% 0 0 0)' }}
+                            transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                    >
+                        {activeProject.title}
+                    </motion.h2>
+                </div>
+                </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      </div>
     </main>
   );
 }
