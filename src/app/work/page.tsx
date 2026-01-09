@@ -20,7 +20,7 @@ const allProjects = [
   {
     id: 'UNEXT DOOR',
     title: 'UNEXT DOOR',
-    category: 'Mobile, Web',
+    category: 'Mobile',
     year: '2024',
     image: '/nextdoor.webp',
     color: '#1a1a2e',
