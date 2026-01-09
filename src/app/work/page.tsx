@@ -160,6 +160,7 @@ const SlicedImage = ({ src, alt }: { src: string; alt: string }) => {
 export default function WorkPage() {
   const [activeCategory, setActiveCategory] = useState('All');
   const [activeId, setActiveId] = useState(allProjects[0].id);
+  const [hoveredId, setHoveredId] = useState<string | null>(null);
   const { theme } = useTheme();
 
   // Filter projects
@@ -211,7 +212,7 @@ export default function WorkPage() {
             </div>
           </div>
 
-          <div className={styles.scrollArea} data-lenis-prevent>
+          <motion.div className={styles.scrollArea} data-lenis-prevent layoutScroll>
              <nav className={styles.projectList}>
                 <AnimatePresence mode="wait">
                     {/* Key changes on filter to trigger re-render of list animation */}
@@ -228,6 +229,8 @@ export default function WorkPage() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.05 }}
+                        onMouseEnter={() => setHoveredId(project.id)}
+                        onMouseLeave={() => setHoveredId(null)}
                     >
                         <div 
                            className={styles.projectLink} 
@@ -237,24 +240,23 @@ export default function WorkPage() {
                             {String(index + 1).padStart(2, '0')}
                         </span>
                         <span className={styles.projectTitle}>
-                            <ScrambleText text={project.title} isActive={activeId === project.id} />
+                            <ScrambleText text={project.title} isActive={hoveredId === project.id || activeId === project.id} />
                         </span>
                         </div>
                         
-                        {/* Active Scanner Line */}
-                        {activeId === project.id && (
-                            <motion.div 
-                                layoutId="activeScanner"
-                                className={styles.activeScanner}
-                                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                            />
-                        )}
+                        {/* Active Scanner Line - No layoutId to prevent scroll reset */}
+                        <motion.div 
+                            className={styles.activeScanner}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: activeId === project.id ? 1 : 0 }}
+                            transition={{ duration: 0.2 }}
+                        />
                     </motion.div>
                     ))}
                     </motion.div>
                 </AnimatePresence>
              </nav>
-          </div>
+          </motion.div>
 
           {/* Project Details Footer */}
           {activeProject && (

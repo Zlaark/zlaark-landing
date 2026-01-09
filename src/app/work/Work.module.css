@@ -265,6 +265,19 @@
   height: 100vh;
 }
 
+/* Gradient Overlay for Navbar Visibility */
+.rightPanel::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8), transparent);
+  z-index: 5;
+  pointer-events: none;
+}
+
 @media (max-width: 1024px) {
   .rightPanel {
     height: 50vh;
