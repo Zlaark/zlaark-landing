@@ -3,166 +3,183 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { ArrowRight, ArrowUpRight } from 'lucide-react';
+import { ArrowUpRight } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
-import FloatingParticles from '../components/Effects/FloatingParticles';
 import styles from './Work.module.css';
-
-const categories = ['All', 'Web', 'E-Commerce', 'Mobile App', 'Branding'];
 
 const projects = [
   {
     id: 'venture-core',
     title: 'Venture Core',
-    category: 'Web',
-    description: 'A sleek fintech platform for next-gen investors.',
-    image: 'https://picsum.photos/id/20/800/500',
+    category: 'Fintech Platform',
+    year: '2024',
+    image: 'https://picsum.photos/id/20/1200/900',
+    color: '#1a1a2e',
   },
   {
     id: 'nebula-stream',
     title: 'Nebula Stream',
     category: 'Mobile App',
-    description: 'Cross-platform streaming experience for music lovers.',
-    image: 'https://picsum.photos/id/26/800/500',
+    year: '2024',
+    image: 'https://picsum.photos/id/26/1200/900',
+    color: '#16213e',
   },
   {
     id: 'apex-health',
     title: 'Apex Health',
-    category: 'Web',
-    description: 'Healthcare portal with patient-first design.',
-    image: 'https://picsum.photos/id/39/800/500',
+    category: 'Healthcare Portal',
+    year: '2023',
+    image: 'https://picsum.photos/id/39/1200/900',
+    color: '#0f3460',
   },
   {
     id: 'lumina-gallery',
     title: 'Lumina Gallery',
     category: 'E-Commerce',
-    description: 'Art marketplace connecting creators and collectors.',
-    image: 'https://picsum.photos/id/48/800/500',
+    year: '2023',
+    image: 'https://picsum.photos/id/48/1200/900',
+    color: '#1a1a2e',
   },
   {
     id: 'quant-x',
     title: 'Quant X',
-    category: 'Web',
-    description: 'Analytics dashboard for institutional traders.',
-    image: 'https://picsum.photos/id/56/800/500',
+    category: 'Analytics Dashboard',
+    year: '2023',
+    image: 'https://picsum.photos/id/56/1200/900',
+    color: '#16213e',
   },
   {
     id: 'urbanscape',
     title: 'Urbanscape',
-    category: 'Branding',
-    description: 'Complete brand identity for urban development firm.',
-    image: 'https://picsum.photos/id/65/800/500',
+    category: 'Brand Identity',
+    year: '2022',
+    image: 'https://picsum.photos/id/65/1200/900',
+    color: '#0f3460',
   },
 ];
 
-const featuredProject = {
-  id: 'venture-core',
-  title: 'Venture Core',
-  category: 'Featured Case Study',
-  description: 'A complete digital transformation for a leading fintech startup. We redesigned their platform from the ground up, resulting in a 340% increase in user engagement and $2M in Series A funding.',
-  image: 'https://picsum.photos/id/20/1200/750',
-};
-
 export default function WorkPage() {
-  const [activeFilter, setActiveFilter] = useState('All');
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isHovering, setIsHovering] = useState(false);
   const { theme } = useTheme();
-  const particleColor = theme === 'light' ? 'rgba(212, 175, 55, 0.5)' : 'rgba(212, 175, 55, 0.2)';
 
-  const filteredProjects = activeFilter === 'All' 
-    ? projects 
-    : projects.filter(p => p.category === activeFilter);
+  const activeProject = projects[activeIndex];
 
   return (
     <main className={styles.page}>
-      {/* ===== HERO ===== */}
-      <section className={styles.hero}>
-        <FloatingParticles count={20} color={particleColor} />
+      {/* ===== SPLIT SCREEN CONTAINER ===== */}
+      <div className={styles.splitContainer}>
         
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className={styles.heroLabel}>Portfolio</span>
-          <h1 className={styles.heroTitle}>Our Work Speaks</h1>
-          <p className={styles.heroSubtitle}>
-            A curated collection of digital experiences that define industries.
-          </p>
-        </motion.div>
-      </section>
+        {/* LEFT PANEL - Project List */}
+        <div className={styles.leftPanel}>
+          <div className={styles.leftHeader}>
+            <span className={styles.labelSmall}>Selected Works</span>
+            <span className={styles.projectCount}>
+              {String(activeIndex + 1).padStart(2, '0')} / {String(projects.length).padStart(2, '0')}
+            </span>
+          </div>
 
-      {/* ===== FILTERS ===== */}
-      <section className={styles.filterSection}>
-        {categories.map((cat) => (
-          <button
-            key={cat}
-            className={`${styles.filterButton} ${activeFilter === cat ? styles.active : ''}`}
-            onClick={() => setActiveFilter(cat)}
-          >
-            {cat}
-          </button>
-        ))}
-      </section>
-
-      {/* ===== PROJECT GRID ===== */}
-      <section className={styles.projectsSection}>
-        <motion.div className={styles.projectGrid} layout>
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project, i) => (
+          <nav className={styles.projectList}>
+            {projects.map((project, index) => (
               <motion.div
                 key={project.id}
-                className={styles.projectCard}
-                layout
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                transition={{ delay: i * 0.05 }}
+                className={`${styles.projectItem} ${activeIndex === index ? styles.active : ''}`}
+                onMouseEnter={() => {
+                  setActiveIndex(index);
+                  setIsHovering(true);
+                }}
+                onMouseLeave={() => setIsHovering(false)}
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.1 }}
               >
-                <Link href={`/work/${project.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <div className={styles.projectImage}>
-                    <img src={project.image} alt={project.title} />
-                    <div className={styles.projectOverlay}>
-                      <ArrowUpRight size={32} color="#fff" />
-                    </div>
-                  </div>
-                  <div className={styles.projectInfo}>
-                    <span className={styles.projectCategory}>{project.category}</span>
-                    <h3 className={styles.projectTitle}>{project.title}</h3>
-                    <p className={styles.projectDesc}>{project.description}</p>
-                  </div>
+                <Link href={`/work/${project.id}`} className={styles.projectLink}>
+                  <span className={styles.projectIndex}>
+                    {String(index + 1).padStart(2, '0')}
+                  </span>
+                  <span className={styles.projectTitle}>{project.title}</span>
+                  <motion.span 
+                    className={styles.projectArrow}
+                    animate={{ 
+                      x: activeIndex === index ? 0 : -10,
+                      opacity: activeIndex === index ? 1 : 0
+                    }}
+                  >
+                    <ArrowUpRight size={20} />
+                  </motion.span>
                 </Link>
+                
+                {/* Active Indicator Line */}
+                <motion.div 
+                  className={styles.activeLine}
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: activeIndex === index ? 1 : 0 }}
+                  transition={{ duration: 0.4 }}
+                />
               </motion.div>
             ))}
-          </AnimatePresence>
-        </motion.div>
-      </section>
+          </nav>
 
-      {/* ===== FEATURED CASE STUDY ===== */}
-      <section className={styles.featuredSection}>
-        <motion.div
-          className={styles.featuredCard}
-          initial={{ opacity: 0, y: 50 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <div className={styles.featuredImage}>
-            <img 
-              src={featuredProject.image} 
-              alt={featuredProject.title}
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-          </div>
-          <div className={styles.featuredContent}>
-            <span className={styles.featuredLabel}>{featuredProject.category}</span>
-            <h2 className={styles.featuredTitle}>{featuredProject.title}</h2>
-            <p className={styles.featuredDesc}>{featuredProject.description}</p>
-            <Link href={`/work/${featuredProject.id}`} className={styles.featuredButton}>
-              View Case Study
-              <ArrowRight size={16} />
-            </Link>
-          </div>
-        </motion.div>
-      </section>
+          {/* Project Details */}
+          <motion.div 
+            className={styles.projectDetails}
+            key={activeProject.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4 }}
+          >
+            <span className={styles.detailCategory}>{activeProject.category}</span>
+            <span className={styles.detailYear}>{activeProject.year}</span>
+          </motion.div>
+        </div>
+
+        {/* RIGHT PANEL - Image Showcase */}
+        <div className={styles.rightPanel}>
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeProject.id}
+              className={styles.imageWrapper}
+              initial={{ opacity: 0, scale: 1.1 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <motion.img
+                src={activeProject.image}
+                alt={activeProject.title}
+                className={styles.projectImage}
+                animate={{
+                  scale: isHovering ? 1.05 : 1,
+                }}
+                transition={{ duration: 0.8 }}
+              />
+              
+              {/* Overlay Gradient */}
+              <div className={styles.imageOverlay} />
+              
+              {/* Floating Project Name */}
+              <motion.h2 
+                className={styles.floatingTitle}
+                initial={{ opacity: 0, y: 30 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+              >
+                {activeProject.title}
+              </motion.h2>
+              
+              {/* View CTA */}
+              <Link href={`/work/${activeProject.id}`} className={styles.viewButton}>
+                <span>View Project</span>
+                <ArrowUpRight size={16} />
+              </Link>
+            </motion.div>
+          </AnimatePresence>
+          
+          {/* Corner Decorations */}
+          <div className={`${styles.corner} ${styles.cornerTL}`} />
+          <div className={`${styles.corner} ${styles.cornerBR}`} />
+        </div>
+      </div>
     </main>
   );
 }
