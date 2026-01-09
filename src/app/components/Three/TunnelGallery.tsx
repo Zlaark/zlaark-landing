@@ -14,21 +14,23 @@ interface ProjectProps {
     index: number;
     zProgress: number; // Current camera Z or scroll progress
     isDarkMode: boolean;
+    hideText?: boolean;
+    subtitle?: string;
 }
 
 // Helper to create texture placeholders
 const IMG_URLS = [
-    "https://picsum.photos/id/20/800/600",
-    "https://picsum.photos/id/26/800/600",
-    "https://picsum.photos/id/39/800/600",
+    "/ourwork.png",
+    "/unextdoor.png",
+    "/gessure.png",
     "https://picsum.photos/id/48/800/600",
     "https://picsum.photos/id/56/800/600",
 ];
 
-function ProjectItem({ position, rotation, url, title, index, zProgress, isDarkMode }: ProjectProps) {
+function ProjectItem({ position, rotation, url, title, subtitle, index, zProgress, isDarkMode, hideText }: ProjectProps) {
     const group = useRef<THREE.Group>(null);
     const imageRef = useRef<any>(null);
-    
+
     useFrame((state) => {
         if (!group.current) return;
         group.current.position.y = position[1] + Math.sin(state.clock.elapsedTime + index) * 0.2;
@@ -36,43 +38,48 @@ function ProjectItem({ position, rotation, url, title, index, zProgress, isDarkM
 
     return (
         <group ref={group} position={position} rotation={rotation}>
-            <Image 
+            <Image
                 ref={imageRef}
-                url={url} 
-                transparent 
+                url={url}
+                transparent
                 scale={5}
             />
-            <Text
-                position={[0, -2.5, 0.1]}
-                fontSize={0.5}
-                color={isDarkMode ? "white" : "#1a1a1a"}
-                anchorX="center"
-                anchorY="top"
-            >
-                {title.toUpperCase()}
-            </Text>
-            <Text
-                position={[0, -3.2, 0.1]}
-                fontSize={0.25}
-                color={isDarkMode ? "#d4af37" : "#b8860b"}
-                anchorX="center"
-                anchorY="top"
-                letterSpacing={0.1}
-            >
-                DIGITAL BENCHMARK 0{index + 1}
-            </Text>
+            {!hideText && (
+                <>
+                    <Text
+                        position={[0, -2.5, 0.1]}
+                        fontSize={0.5}
+                        color={isDarkMode ? "white" : "#1a1a1a"}
+                        anchorX="center"
+                        anchorY="top"
+                    >
+                        {title.toUpperCase()}
+                    </Text>
+                    <Text
+                        position={[0, -3.2, 0.1]}
+                        fontSize={0.25}
+                        color={isDarkMode ? "#d4af37" : "#b8860b"}
+                        anchorX="center"
+                        anchorY="top"
+                        letterSpacing={0.1}
+                        textAlign="center"
+                    >
+                        {subtitle || `DIGITAL BENCHMARK 0${index + 1}`}
+                    </Text>
+                </>
+            )}
         </group>
     );
 }
 
 export default function TunnelGallery({ scrollProgress, isDarkMode }: { scrollProgress: number, isDarkMode: boolean }) {
     const { camera } = useThree();
-    
+
     // Projects Config
     const projects = useMemo(() => [
         { title: "Venture Core", pos: [-3, 0, 0], rot: [0, 0.2, 0] },
-        { title: "Nebula Stream", pos: [3, 0, -10], rot: [0, -0.2, 0] },
-        { title: "Apex Health", pos: [-3, 0, -20], rot: [0, 0.2, 0] },
+        { title: "UNEXT DOOR", subtitle: "AI LANGUAGE TUTOR", pos: [3, 0, -10], rot: [0, -0.2, 0] },
+        { title: "GESSURE", subtitle: "India’s Next-Gen\nProfessional Networking Platform.", pos: [-3, 0, -20], rot: [0, 0.2, 0] },
         { title: "Lumina Gallery", pos: [3, 0, -30], rot: [0, -0.2, 0] },
         { title: "Quant X", pos: [-3, 0, -40], rot: [0, 0.2, 0] },
     ], []);
@@ -81,11 +88,11 @@ export default function TunnelGallery({ scrollProgress, isDarkMode }: { scrollPr
         // Map 0-1 scrollProgress to Camera Z
         // 0 -> 5 (Start)
         // 1 -> -45 (End)
-        const targetZ = 5 - (scrollProgress * 55); 
-        
+        const targetZ = 5 - (scrollProgress * 55);
+
         // Smooth camera movement
         easing.damp(camera.position, 'z', targetZ, 0.2, delta);
-        
+
         // Slight camera sway
         const mouseX = (state.pointer.x * 2);
         const mouseY = (state.pointer.y * 2);
@@ -96,15 +103,17 @@ export default function TunnelGallery({ scrollProgress, isDarkMode }: { scrollPr
     return (
         <group>
             {projects.map((p, i) => (
-                <ProjectItem 
+                <ProjectItem
                     key={i}
                     index={i}
-                    url={IMG_URLS[i % IMG_URLS.length]} 
+                    url={IMG_URLS[i % IMG_URLS.length]}
                     title={p.title}
                     position={p.pos as [number, number, number]}
                     rotation={p.rot as [number, number, number]}
                     zProgress={scrollProgress}
                     isDarkMode={isDarkMode}
+                    hideText={i === 0}
+                    subtitle={p.subtitle}
                 />
             ))}
         </group>

@@ -10,77 +10,85 @@ import styles from './Work.module.css';
 // Expanded Dataset
 const allProjects = [
   {
-    id: 'venture-core',
-    title: 'Venture Core',
-    category: 'Web',
-    year: '2024',
-    image: 'https://picsum.photos/id/20/1200/900',
-    color: '#1a1a2e',
-  },
-  {
-    id: 'nebula-stream',
-    title: 'Nebula Stream',
-    category: 'Mobile',
-    year: '2024',
-    image: 'https://picsum.photos/id/26/1200/900',
+    id: 'GESSURE',
+    title: 'GESSURE',
+    category: 'Mobile, Web',
+    year: '2025',
+    image: '/gessure.png',
     color: '#16213e',
   },
   {
-    id: 'apex-health',
-    title: 'Apex Health',
-    category: 'Web',
-    year: '2023',
-    image: 'https://picsum.photos/id/39/1200/900',
+    id: 'UNEXT DOOR',
+    title: 'UNEXT DOOR',
+    category: 'Mobile, Web',
+    year: '2024',
+    image: '/nextdoor.webp',
+    color: '#1a1a2e',
+  },
+  // {
+  //   id: 'nebula-stream',
+  //   title: 'Nebula Stream',
+  //   category: 'Mobile',
+  //   year: '2024',
+  //   image: 'https://picsum.photos/id/26/1200/900',
+  //   color: '#16213e',
+  // },
+  {
+    id: 'VARAAKIE',
+    title: 'VARAAKIE',
+    category: 'Web, E-Commerce',
+    year: '2025',
+    image: '/vaarakie.png',
     color: '#0f3460',
   },
   {
-    id: 'lumina-gallery',
-    title: 'Lumina Gallery',
-    category: 'E-Commerce',
-    year: '2023',
-    image: 'https://picsum.photos/id/48/1200/900',
+    id: 'SKOAL',
+    title: 'SKOAL',
+    category: 'Web',
+    year: '2025',
+    image: '/skoal.png',
     color: '#1a1a2e',
   },
   {
-    id: 'quant-x',
-    title: 'Quant X',
+    id: 'ASSURE QAI',
+    title: 'ASSURE QAI',
     category: 'Web',
-    year: '2023',
-    image: 'https://picsum.photos/id/56/1200/900',
+    year: '2025',
+    image: '/assure.png',
     color: '#16213e',
   },
-  {
-    id: 'urbanscape',
-    title: 'Urbanscape',
-    category: 'Branding',
-    year: '2022',
-    image: 'https://picsum.photos/id/65/1200/900',
-    color: '#0f3460',
-  },
-  {
-    id: 'nova-systems',
-    title: 'Nova Systems',
-    category: 'Web',
-    year: '2022',
-    image: 'https://picsum.photos/id/76/1200/900',
-    color: '#2a2a2a',
-  },
-  {
-    id: 'echo-audio',
-    title: 'Echo Audio',
-    category: 'Mobile',
-    year: '2022',
-    image: 'https://picsum.photos/id/88/1200/900',
-    color: '#333',
-  },
-  {
-    id: 'zenith-fashion',
-    title: 'Zenith Fashion',
-    category: 'E-Commerce',
-    year: '2021',
-    image: 'https://picsum.photos/id/99/1200/900',
-    color: '#000',
-  }
+  // {
+  //   id: 'urbanscape',
+  //   title: 'Urbanscape',
+  //   category: 'Branding',
+  //   year: '2022',
+  //   image: 'https://picsum.photos/id/65/1200/900',
+  //   color: '#0f3460',
+  // },
+  // {
+  //   id: 'nova-systems',
+  //   title: 'Nova Systems',
+  //   category: 'Web',
+  //   year: '2022',
+  //   image: 'https://picsum.photos/id/76/1200/900',
+  //   color: '#2a2a2a',
+  // },
+  // {
+  //   id: 'echo-audio',
+  //   title: 'Echo Audio',
+  //   category: 'Mobile',
+  //   year: '2022',
+  //   image: 'https://picsum.photos/id/88/1200/900',
+  //   color: '#333',
+  // },
+  // {
+  //   id: 'zenith-fashion',
+  //   title: 'Zenith Fashion',
+  //   category: 'E-Commerce',
+  //   year: '2021',
+  //   image: 'https://picsum.photos/id/99/1200/900',
+  //   color: '#000',
+  // }
 ];
 
 const categories = ['All', 'Web', 'Mobile', 'E-Commerce', 'Branding'];
@@ -126,11 +134,19 @@ const SlicedImage = ({ src, alt }: { src: string; alt: string }) => {
 
   return (
     <div className={styles.slicedWrapper}>
-      <div 
-        className={styles.staticBg}
-        style={{ backgroundImage: `url(${src})` }} 
-      />
-      
+      <div className={styles.staticBg}>
+        <img
+          src={src}
+          alt={alt}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            borderRadius: '24px'
+          }}
+        />
+      </div>
+
       {[...Array(slices)].map((_, i) => (
         <motion.div
           key={i}
@@ -146,11 +162,31 @@ const SlicedImage = ({ src, alt }: { src: string; alt: string }) => {
           style={{
             left: `${(i / slices) * 100}%`,
             width: `${100 / slices}%`,
-            backgroundImage: `url(${src})`,
-            backgroundPosition: `${(i / (slices - 1)) * 100}% center`,
-            backgroundSize: `${slices * 100}% 100%`,
+            overflow: 'hidden',
+            backgroundColor: 'transparent',
+            backgroundImage: 'none',
+            boxShadow: 'none',
           }}
-        />
+        >
+          <div style={{
+            position: 'absolute',
+            top: 0,
+            left: `-${i * 100}%`,
+            width: `${slices * 100}%`,
+            height: '100%',
+          }}>
+            <img
+              src={src}
+              alt={alt}
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+                borderRadius: '24px'
+              }}
+            />
+          </div>
+        </motion.div>
       ))}
     </div>
   );
@@ -165,17 +201,17 @@ export default function WorkPage() {
 
   // Filter projects
   const filteredProjects = useMemo(() => {
-    return activeCategory === 'All' 
-        ? allProjects 
-        : allProjects.filter(p => p.category === activeCategory);
+    return activeCategory === 'All'
+      ? allProjects
+      : allProjects.filter(p => p.category === activeCategory);
   }, [activeCategory]);
 
   // Ensure activeId is valid when filtering
   useEffect(() => {
     if (!filteredProjects.find(p => p.id === activeId)) {
-        if (filteredProjects.length > 0) {
-            setActiveId(filteredProjects[0].id);
-        }
+      if (filteredProjects.length > 0) {
+        setActiveId(filteredProjects[0].id);
+      }
     }
   }, [activeCategory, filteredProjects, activeId]);
 
@@ -184,104 +220,104 @@ export default function WorkPage() {
   return (
     <main className={styles.page}>
       <div className={styles.splitContainer}>
-        
+
         {/* LEFT PANEL - Scrollable List */}
         <div className={styles.leftPanel}>
           <div className={styles.leftHeader}>
             <div className={styles.headerTop}>
-                 <span className={styles.labelSmall}>Selected Works</span>
-                 <span className={styles.projectCount}>
-                    {filteredProjects.length} Projects
-                 </span>
+              <span className={styles.labelSmall}>Selected Works</span>
+              <span className={styles.projectCount}>
+                {filteredProjects.length} Projects
+              </span>
             </div>
-            
+
             {/* Filter Bar */}
             <div className={styles.filterBar}>
-                {categories.map((cat) => (
-                    <button 
-                        key={cat}
-                        className={`${styles.filterBtn} ${activeCategory === cat ? styles.filterBtnActive : ''}`}
-                        onClick={() => setActiveCategory(cat)}
-                    >
-                        {cat}
-                        {activeCategory === cat && (
-                            <motion.div className={styles.filterLine} layoutId="filterLine" />
-                        )}
-                    </button>
-                ))}
+              {categories.map((cat) => (
+                <button
+                  key={cat}
+                  className={`${styles.filterBtn} ${activeCategory === cat ? styles.filterBtnActive : ''}`}
+                  onClick={() => setActiveCategory(cat)}
+                >
+                  {cat}
+                  {activeCategory === cat && (
+                    <motion.div className={styles.filterLine} layoutId="filterLine" />
+                  )}
+                </button>
+              ))}
             </div>
           </div>
 
           <motion.div className={styles.scrollArea} data-lenis-prevent layoutScroll>
-             <nav className={styles.projectList}>
-                <AnimatePresence mode="wait">
-                    {/* Key changes on filter to trigger re-render of list animation */}
-                    <motion.div 
-                        key={activeCategory}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                    >
-                    {filteredProjects.map((project, index) => (
+            <nav className={styles.projectList}>
+              <AnimatePresence mode="wait">
+                {/* Key changes on filter to trigger re-render of list animation */}
+                <motion.div
+                  key={activeCategory}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  {filteredProjects.map((project, index) => (
                     <motion.div
-                        key={project.id}
-                        className={`${styles.projectItem} ${activeId === project.id ? styles.active : ''}`}
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.05 }}
-                        onMouseEnter={() => setHoveredId(project.id)}
-                        onMouseLeave={() => setHoveredId(null)}
+                      key={project.id}
+                      className={`${styles.projectItem} ${activeId === project.id ? styles.active : ''}`}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 }}
+                      onMouseEnter={() => setHoveredId(project.id)}
+                      onMouseLeave={() => setHoveredId(null)}
                     >
-                        <div 
-                           className={styles.projectLink} 
-                           onClick={() => setActiveId(project.id)}
-                        >
+                      <div
+                        className={styles.projectLink}
+                        onClick={() => setActiveId(project.id)}
+                      >
                         <span className={styles.projectIndex}>
-                            {String(index + 1).padStart(2, '0')}
+                          {String(index + 1).padStart(2, '0')}
                         </span>
                         <span className={styles.projectTitle}>
-                            <ScrambleText text={project.title} isActive={hoveredId === project.id || activeId === project.id} />
+                          <ScrambleText text={project.title} isActive={hoveredId === project.id || activeId === project.id} />
                         </span>
-                        </div>
-                        
-                        {/* Active Scanner Line - No layoutId to prevent scroll reset */}
-                        <motion.div 
-                            className={styles.activeScanner}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: activeId === project.id ? 1 : 0 }}
-                            transition={{ duration: 0.2 }}
-                        />
+                      </div>
+
+                      {/* Active Scanner Line - No layoutId to prevent scroll reset */}
+                      <motion.div
+                        className={styles.activeScanner}
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: activeId === project.id ? 1 : 0 }}
+                        transition={{ duration: 0.2 }}
+                      />
                     </motion.div>
-                    ))}
-                    </motion.div>
-                </AnimatePresence>
-             </nav>
+                  ))}
+                </motion.div>
+              </AnimatePresence>
+            </nav>
           </motion.div>
 
           {/* Project Details Footer */}
           {activeProject && (
-            <motion.div 
-                className={styles.projectDetails}
-                key={activeProject.id} // Re-animates on change
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
+            <motion.div
+              className={styles.projectDetails}
+              key={activeProject.id} // Re-animates on change
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.3 }}
             >
-                <div className={styles.detailItem}>
-                    <span className={styles.detailLabel}>Client</span>
-                    <span className={styles.detailValue}>{activeProject.title}</span>
-                </div>
-                <div className={styles.detailItem}>
-                    <span className={styles.detailLabel}>Industry</span>
-                    <span className={styles.detailValue}>{activeProject.category}</span>
-                </div>
-                <div className={styles.detailItem}>
-                    <span className={styles.detailLabel}>Year</span>
-                    <span className={styles.detailValue}>{activeProject.year}</span>
-                </div>
-                <Link href={`/work/${activeProject.id}`} className={styles.viewLink}>
-                    View Case Study <ArrowUpRight size={16} />
-                </Link>
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>Client</span>
+                <span className={styles.detailValue}>{activeProject.title}</span>
+              </div>
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>Industry</span>
+                <span className={styles.detailValue}>{activeProject.category}</span>
+              </div>
+              <div className={styles.detailItem}>
+                <span className={styles.detailLabel}>Year</span>
+                <span className={styles.detailValue}>{activeProject.year}</span>
+              </div>
+              <Link href={`/work/${activeProject.id}`} className={styles.viewLink}>
+                View Case Study <ArrowUpRight size={16} />
+              </Link>
             </motion.div>
           )}
         </div>
@@ -290,25 +326,25 @@ export default function WorkPage() {
         <div className={styles.rightPanel}>
           <AnimatePresence mode="popLayout">
             {activeProject && (
-                <motion.div 
-                    key={activeProject.id}
-                    className={styles.imageContainer}
-                    initial={{ opacity: 1 }}
-                    exit={{ opacity: 1 }}
-                >
+              <motion.div
+                key={activeProject.id}
+                className={styles.imageContainer}
+                initial={{ opacity: 1 }}
+                exit={{ opacity: 1 }}
+              >
                 <SlicedImage src={activeProject.image} alt={activeProject.title} />
-                
+
                 <div className={styles.overlayContent}>
-                    <motion.h2 
-                            className={styles.bigTitle}
-                            initial={{ clipPath: 'inset(100% 0 0 0)' }}
-                            animate={{ clipPath: 'inset(0% 0 0 0)' }}
-                            transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                    >
-                        {activeProject.title}
-                    </motion.h2>
+                  <motion.h2
+                    className={styles.bigTitle}
+                    initial={{ clipPath: 'inset(100% 0 0 0)' }}
+                    animate={{ clipPath: 'inset(0% 0 0 0)' }}
+                    transition={{ duration: 1, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                  >
+                    {activeProject.title}
+                  </motion.h2>
                 </div>
-                </motion.div>
+              </motion.div>
             )}
           </AnimatePresence>
         </div>
