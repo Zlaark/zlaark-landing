@@ -387,7 +387,75 @@
   border-color: #fff;
 }
 
-/* RESPONSIVE */
+/* COMPACT DESKTOP (No Scroll Fix) */
+@media (max-width: 1440px) {
+  .page {
+    padding-top: 100px;
+    padding-bottom: 2rem;
+  }
+
+  .container {
+    gap: 3rem;
+    align-items: center;
+    /* Center vertically if space allows */
+  }
+
+  /* Compact Left Panel */
+  .leftPanel {
+    gap: 2rem;
+  }
+
+  .heroTitle {
+    font-size: 3.2rem;
+  }
+
+  /* Compact Form Panel */
+  .rightPanel {
+    padding: 2rem;
+  }
+
+  .formHeader {
+    font-size: 1.25rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+  }
+
+  .formRow,
+  .inputGroup {
+    margin-bottom: 1.2rem;
+  }
+
+  /* Compact Inputs */
+  .inputGroup input,
+  .inputGroup textarea,
+  .customSelectTrigger {
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+  }
+
+  .inputGroup label,
+  .customLabel {
+    top: 0.5rem;
+    font-size: 0.9rem;
+  }
+
+  /* Adjust active label position for tighter space */
+  .inputGroup input:focus+label,
+  .inputGroup input:not(:placeholder-shown)+label,
+  .inputGroup label.active,
+  .customLabel.active {
+    top: -8px;
+    font-size: 0.7rem;
+  }
+
+  .submitButton {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* TABLET / MOBILE */
 @media (max-width: 1024px) {
   .heroTitle {
     font-size: 3rem;
