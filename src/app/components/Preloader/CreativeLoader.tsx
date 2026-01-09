@@ -14,12 +14,12 @@ export default function CreativeLoader({ onComplete }: { onComplete: () => void 
 
   useEffect(() => {
     // Session Check
-    const hasSeen = sessionStorage.getItem('zlaark_genesis_loader');
-    if (hasSeen) {
-      setShowDirect(true);
-      onComplete();
-      return;
-    }
+    // const hasSeen = sessionStorage.getItem('zlaark_genesis_loader');
+    // if (hasSeen) {
+    //   setShowDirect(true);
+    //   onComplete();
+    //   return;
+    // }
     sessionStorage.setItem('zlaark_genesis_loader', 'true');
 
     // Sequence Timing

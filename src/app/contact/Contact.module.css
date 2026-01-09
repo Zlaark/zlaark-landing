@@ -1,241 +1,424 @@
 .page {
-  background: var(--bg-color);
-  color: var(--text-color);
   min-height: 100vh;
-}
-
-/* ===== HERO ===== */
-.hero {
-  padding: 15rem var(--page-padding) 5rem;
+  width: 100%;
+  background: #050505;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   position: relative;
+  overflow: hidden;
+  padding: 8rem 2rem 4rem;
 }
 
-.heroLabel {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  color: var(--accent-color);
-  text-transform: uppercase;
-  letter-spacing: 0.4em;
-  margin-bottom: 2rem;
-  display: block;
+/* Animated Gradient Background */
+.gradientBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.1) 0%, transparent 50%),
+    radial-gradient(ellipse at 80% 80%, rgba(100, 50, 150, 0.08) 0%, transparent 40%);
+  animation: gradientShift 15s ease-in-out infinite alternate;
+  pointer-events: none;
 }
 
-.heroTitle {
+@keyframes gradientShift {
+  0% {
+    opacity: 0.5;
+    transform: scale(1) translateY(0);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scale(1.1) translateY(-5%);
+  }
+}
+
+.container {
+  width: 100%;
+  max-width: 1200px;
+  position: relative;
+  z-index: 10;
+}
+
+.pageHeader {
+  position: absolute;
+  top: -8rem;
+  /* Moved up more to fit larger text/line */
+  left: 0;
+  width: 100%;
+  text-align: center;
   font-family: var(--font-heading);
-  font-size: clamp(4rem, 11vw, 8rem);
-  font-weight: 400;
-  margin-bottom: 2rem;
-  line-height: 0.9;
-}
-
-.heroSubtitle {
-  font-family: var(--font-body);
-  font-size: 1.2rem;
-  color: var(--text-muted);
-  max-width: 500px;
-}
-
-/* ===== CONTACT GRID ===== */
-.contactSection {
-  padding: 5rem var(--page-padding) 15rem;
-}
-
-.contactGrid {
-  display: grid;
-  grid-template-columns: 1fr 1.5fr;
-  gap: 8rem;
-}
-
-/* ===== INFO SIDE ===== */
-.infoSide {
-  padding-top: 2rem;
-}
-
-.infoBlock {
-  margin-bottom: 4rem;
-}
-
-.infoLabel {
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  color: var(--accent-color);
+  /* Changed to Heading font */
+  font-size: 3rem;
+  /* Much larger */
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  margin-bottom: 1rem;
-  display: block;
+  color: rgba(255, 255, 255, 0.2);
+  /* Slightly more subtle opacity for large text */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
 }
 
-.infoValue {
+.pageHeader::after {
+  content: '';
+  width: 1px;
+  height: 4rem;
+  /* Longer line */
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.2), transparent);
+}
+
+/* ===== THE FORM SENTENCE ===== */
+.form {
+  width: 100%;
+}
+
+.formLine {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  margin-bottom: 0.25rem;
   font-family: var(--font-heading);
-  font-size: 1.8rem;
-  line-height: 1.4;
+  font-size: 2rem;
+  line-height: 2;
+  color: rgba(255, 255, 255, 0.3);
   font-weight: 400;
 }
 
-.infoValue a {
-  color: var(--text-color);
-  text-decoration: none;
-  position: relative;
+.sentence {
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  line-height: 2.2;
+  color: rgba(255, 255, 255, 0.3);
+  font-weight: 400;
+  margin: 0;
 }
 
-.infoValue a::after {
-  content: '';
+.text {
+  display: inline;
+  transition: color 0.3s;
+}
+
+/* On hover, slightly brighten surrounding text? Maybe distracting. Keep simple. */
+
+.inputWrapper {
+  display: inline-flex;
+  flex-direction: column;
+  vertical-align: baseline;
+  /* Align with text baseline */
+  position: relative;
+  margin: 0 0.5rem;
+}
+
+/* Common Styles for Input and Select */
+.input,
+.select {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  /* Match formLine size */
+  color: #fff;
+  /* Active input is bright white */
+  padding: 0;
+  margin: 0;
+  outline: none;
+  min-width: 250px;
+  /* Base width */
+  text-align: center;
+  cursor: text;
+  transition: border-color 0.3s;
+}
+
+/* Placeholder styling */
+/* Custom Select Styles */
+.customSelectWrapper {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  margin: 0 0.5rem;
+  vertical-align: baseline;
+}
+
+.selectTrigger {
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  font-family: var(--font-heading);
+  font-size: 2rem;
+  color: var(--accent-color);
+  padding: 0 1.5rem 0 0.5rem;
+  cursor: pointer;
+  text-align: center;
+  /* Custom dropdown arrow */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23D4AF37' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right rem center;
+  min-width: 200px;
+}
+
+.selectTrigger.empty {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  min-width: 250px;
+  background: rgba(10, 10, 10, 0.95);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+  border-radius: 4px;
+  padding: 0.5rem 0;
+  list-style: none;
+  z-index: 50;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(10px);
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.dropdownItem {
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-align: left;
+}
+
+.dropdownItem:hover {
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--accent-color);
+  padding-left: 2rem;
+  /* Slide effect */
+}
+
+/* Select specifics */
+/* Removed native select styles */
+
+/* Animated Underline */
+.underline {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 0%;
-  height: 1px;
-  background: var(--text-color);
-  transition: width 0.3s;
+  height: 2px;
+  background: var(--accent-color);
+  transition: width 0.4s ease;
 }
 
-.infoValue a:hover::after {
+.underline[data-active="true"] {
   width: 100%;
 }
 
-.socialLinks {
+/* ===== SUBMIT BUTTON ===== */
+.submitWrapper {
+  margin-top: 4rem;
   display: flex;
-  gap: 2rem;
-  margin-top: 5rem;
-}
-
-.socialLink {
-  width: 60px;
-  height: 60px;
-  border: 1px solid var(--border-color);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
+  justify-content: flex-end;
+  /* Align right or center? Center feels majestic. */
   justify-content: center;
-  color: var(--text-muted);
-  transition: all 0.3s;
-}
-
-.socialLink:hover {
-  border-color: var(--accent-color);
-  color: var(--accent-color);
-  transform: translateY(-5px) rotate(45deg);
-}
-
-/* ===== FORM SIDE ===== */
-.formSide {
-  background: transparent;
-  padding: 0;
-}
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 3rem;
-}
-
-.formRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 3rem;
-}
-
-.formGroup {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-
-.formLabel {
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 1rem;
-}
-
-.formInput,
-.formTextarea,
-.formSelect {
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid var(--border-color);
-  border-radius: 0;
-  padding: 1rem 0;
-  font-family: var(--font-heading);
-  font-size: 1.5rem;
-  color: var(--text-color);
-  transition: border-color 0.3s;
-}
-
-.formInput:focus,
-.formTextarea:focus,
-.formSelect:focus {
-  outline: none;
-  border-color: var(--accent-color);
-}
-
-.formInput::placeholder,
-.formTextarea::placeholder {
-  color: var(--text-muted);
-  opacity: 0.3;
-  font-family: var(--font-body);
-  font-size: 1.2rem;
-}
-
-.formTextarea {
-  min-height: 150px;
-  resize: vertical;
-}
-
-.formSelect {
-  cursor: pointer;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 0 center;
 }
 
 .submitButton {
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 2rem 3rem;
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 0;
-  color: var(--text-color);
+  background: var(--accent-color);
+  color: #000;
+  border: none;
+  padding: 1.5rem 3rem;
+  border-radius: 100px;
   font-family: var(--font-body);
-  font-size: 1rem;
+  font-size: 1.25rem;
   font-weight: 600;
   text-transform: uppercase;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.05em;
   cursor: pointer;
-  transition: all 0.3s;
-  margin-top: 2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  transition: transform 0.2s;
 }
 
-.submitButton:hover {
+.submitButton:hover:not(:disabled) {
+  transform: scale(1.05);
+}
+
+/* ===== SUCCESS STATE ===== */
+.successMessage {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.successIcon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
   background: var(--accent-color);
-  border-color: var(--accent-color);
   color: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 
+.successMessage h2 {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  color: #fff;
+}
+
+.successMessage p {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.resetBtn {
+  margin-top: 2rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 50px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  transition: background 0.3s;
+}
+
+.resetBtn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ===== CONTACT FOOTER (Micro) ===== */
+.contactInfoFooter {
+  position: absolute;
+  bottom: 2rem;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 3rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 2rem;
+  opacity: 0.5;
+}
+
+.footerItem {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.footerItem span {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.5);
+  letter-spacing: 0.1em;
+}
+
+.footerItem a,
+.footerItem p {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: #fff;
+  text-decoration: none;
+}
+
+.socials {
+  display: flex;
+  gap: 1rem;
+}
+
+/* ===== RESPONSIVE ===== */
 @media (max-width: 1024px) {
-  .contactGrid {
-    grid-template-columns: 1fr;
-    gap: 5rem;
+
+  .sentence,
+  .input,
+  .select {
+    font-size: 2rem;
   }
 }
 
 @media (max-width: 768px) {
-  .heroTitle {
-    font-size: 3.5rem;
+  .page {
+    justify-content: flex-start;
+    padding-top: 12rem;
+    /* Increased to clear the overlapping header */
+    height: auto;
+    overflow-y: auto;
   }
 
-  .formRow {
-    grid-template-columns: 1fr;
+  /* Scale down the big header on mobile */
+  .pageHeader {
+    top: -5rem;
+    /* Move down so it sits BELOW the logo/navbar space */
+    font-size: 2rem;
+  }
+
+  .pageHeader::after {
+    height: 3rem;
+    /* Longer line to push form down */
+  }
+
+  .sentence,
+  .input,
+  .select {
+    font-size: 1.1rem;
+    /* Further reduced from 1.35rem */
+    line-height: 2;
+  }
+
+  .inputWrapper {
+    margin: 0.75rem 0;
+    /* More vertical space between inputs */
+    width: 100%;
+  }
+
+  .input,
+  .select {
+    width: 100%;
+    min-width: 0;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .container {
+    padding-bottom: 4rem;
+  }
+
+  .contactInfoFooter {
+    position: relative;
+    flex-direction: column;
     gap: 2rem;
+    margin-top: 4rem;
+    text-align: center;
+    align-items: center;
   }
 
-  .formInput,
-  .formSelect {
-    font-size: 1.2rem;
+  /* Hide the line break on mobile, let it flow */
+  .desktopBreak {
+    display: none;
+  }
+
+  .submitButton {
+    padding: 1rem 2rem;
+    /* Reduced padding */
+    font-size: 1rem;
+    /* Smaller font */
+    width: auto;
+    white-space: nowrap;
+    /* Prevent wrapping */
   }
 }

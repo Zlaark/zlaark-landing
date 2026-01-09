@@ -1,194 +1,323 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Send, Linkedin, Twitter, Instagram, Dribbble } from 'lucide-react';
+import { motion, AnimatePresence, Variants } from 'framer-motion';
+import { ArrowRight, Check } from 'lucide-react';
 import FloatingParticles from '../components/Effects/FloatingParticles';
 import { useTheme } from '../context/ThemeContext';
 import styles from './Contact.module.css';
 
-const budgetOptions = [
-  'Under $5,000',
-  '$5,000 - $15,000',
-  '$15,000 - $50,000',
-  '$50,000+',
-  'Not Sure Yet',
+const services = [
+  'Web Development',
+  'Brand Identity',
+  'Mobile App',
+  'E-Commerce',
+  'Product Strategy',
+  'Other'
 ];
+
+const budgets = [
+  'Under $10k',
+  '$10k - $30k',
+  '$30k - $60k',
+  '$60k+'
+];
+
+// Stagger Animation Variants
+const containerVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.3,
+    }
+  }
+};
+
+const wordVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+  }
+};
+
+// Custom Select Component for full styling control
+const CustomSelect = ({ 
+  options, 
+  value, 
+  onChange, 
+  placeholder, 
+  name,
+  isActive,
+  onToggle
+}: {
+  options: string[],
+  value: string,
+  onChange: (value: string) => void,
+  placeholder: string,
+  name: string,
+  isActive: boolean,
+  onToggle: (name: string | null) => void
+}) => {
+  return (
+    <div className={styles.customSelectWrapper}>
+      <button 
+        type="button"
+        className={`${styles.selectTrigger} ${!value ? styles.empty : ''}`}
+        onClick={() => onToggle(isActive ? null : name)}
+      >
+        {value || placeholder}
+      </button>
+      
+      <span className={styles.underline} data-active={isActive || !!value} />
+      
+      <AnimatePresence>
+        {isActive && (
+          <motion.ul 
+            className={styles.dropdown}
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.2 }}
+          >
+            {options.map((option) => (
+              <li 
+                key={option} 
+                className={styles.dropdownItem}
+                onClick={() => {
+                  onChange(option);
+                  onToggle(null);
+                }}
+              >
+                {option}
+              </li>
+            ))}
+          </motion.ul>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
 
 export default function ContactPage() {
   const { theme } = useTheme();
   const particleColor = theme === 'light' ? 'rgba(212, 175, 55, 0.5)' : 'rgba(212, 175, 55, 0.2)';
-
-  const [formData, setFormData] = useState({
+  
+  const [formState, setFormState] = useState({
     name: '',
-    email: '',
     company: '',
-    budget: '',
-    message: '',
+    email: '',
+    service: '',
+    budget: ''
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [activeField, setActiveField] = useState<string | null>(null);
+  // Track which dropdown is open
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+
+  const isValid = formState.name && formState.email && formState.service && formState.budget;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormState({ ...formState, [e.target.name]: e.target.value });
+  };
+  
+  const handleSelectChange = (name: string, value: string) => {
+    setFormState({ ...formState, [name]: value });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-    alert('Thank you for your message! We\'ll be in touch soon.');
+    if (!isValid) return;
+    setTimeout(() => setIsSubmitted(true), 800);
+  };
+
+  // Close dropdowns when clicking outside (simple hack: click on main container closes)
+  const handleBackgroundClick = (e: React.MouseEvent) => {
+    if ((e.target as HTMLElement).closest(`.${styles.customSelectWrapper}`)) return;
+    setOpenDropdown(null);
   };
 
   return (
-    <main className={styles.page}>
-      {/* ===== HERO ===== */}
-      <section className={styles.hero}>
-        <FloatingParticles count={15} color={particleColor} />
-        
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
+    <main className={styles.page} onClick={handleBackgroundClick}>
+      {/* Animated Gradient Background */}
+      <div className={styles.gradientBg} />
+      
+      <FloatingParticles count={20} color={particleColor} />
+      
+      <div className={styles.container}>
+        <motion.h6 
+          className={styles.pageHeader}
+          initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.8, delay: 0.1 }}
         >
-          <span className={styles.heroLabel}>Get in Touch</span>
-          <h1 className={styles.heroTitle}>Let's Create Together</h1>
-          <p className={styles.heroSubtitle}>
-            Have a project in mind? We'd love to hear about it.
-          </p>
-        </motion.div>
-      </section>
-
-      {/* ===== CONTACT GRID ===== */}
-      <section className={styles.contactSection}>
-        <div className={styles.contactGrid}>
-          {/* Info Side */}
-          <motion.div
-            className={styles.infoSide}
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          Inquiry
+        </motion.h6>
+        
+        {!isSubmitted ? (
+          <motion.form 
+            className={styles.form}
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            onSubmit={handleSubmit}
           >
-            <div className={styles.infoBlock}>
-              <span className={styles.infoLabel}>Email</span>
-              <p className={styles.infoValue}>
-                <a href="mailto:hello@zlaark.com">hello@zlaark.com</a>
-              </p>
-            </div>
-
-            <div className={styles.infoBlock}>
-              <span className={styles.infoLabel}>Location</span>
-              <p className={styles.infoValue}>
-                Amritsar, India<br />
-                Working Globally
-              </p>
-            </div>
-
-            <div className={styles.infoBlock}>
-              <span className={styles.infoLabel}>Response Time</span>
-              <p className={styles.infoValue}>
-                Within 24 Hours
-              </p>
-            </div>
-
-            <div className={styles.socialLinks}>
-              <a href="#" className={styles.socialLink} aria-label="LinkedIn">
-                <Linkedin size={20} />
-              </a>
-              <a href="#" className={styles.socialLink} aria-label="Twitter">
-                <Twitter size={20} />
-              </a>
-              <a href="#" className={styles.socialLink} aria-label="Instagram">
-                <Instagram size={20} />
-              </a>
-              <a href="#" className={styles.socialLink} aria-label="Dribbble">
-                <Dribbble size={20} />
-              </a>
-            </div>
-          </motion.div>
-
-          {/* Form Side */}
-          <motion.div
-            className={styles.formSide}
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-          >
-            <form className={styles.form} onSubmit={handleSubmit}>
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Your Name</label>
-                  <input
-                    type="text"
-                    name="name"
-                    className={styles.formInput}
-                    placeholder="John Doe"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Email Address</label>
-                  <input
-                    type="email"
-                    name="email"
-                    className={styles.formInput}
-                    placeholder="john@company.com"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-              </div>
-
-              <div className={styles.formRow}>
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Company</label>
-                  <input
-                    type="text"
-                    name="company"
-                    className={styles.formInput}
-                    placeholder="Your Company"
-                    value={formData.company}
-                    onChange={handleChange}
-                  />
-                </div>
-                <div className={styles.formGroup}>
-                  <label className={styles.formLabel}>Budget Range</label>
-                  <select
-                    name="budget"
-                    className={styles.formSelect}
-                    value={formData.budget}
-                    onChange={handleChange}
-                    required
-                  >
-                    <option value="">Select Budget</option>
-                    {budgetOptions.map((opt) => (
-                      <option key={opt} value={opt}>{opt}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-
-              <div className={styles.formGroup}>
-                <label className={styles.formLabel}>Project Details</label>
-                <textarea
-                  name="message"
-                  className={styles.formTextarea}
-                  placeholder="Tell us about your project, goals, and timeline..."
-                  value={formData.message}
+            {/* Single flowing paragraph */}
+            <p className={styles.sentence}>
+              <motion.span variants={wordVariants} className={styles.text}>Hello, my name is </motion.span>
+              <motion.span variants={wordVariants} className={styles.inputWrapper}>
+                <input 
+                  type="text" 
+                  name="name"
+                  placeholder="your name"
+                  className={`${styles.input} ${!formState.name ? styles.empty : ''}`}
+                  value={formState.name}
                   onChange={handleChange}
-                  required
+                  onFocus={() => { setActiveField('name'); setOpenDropdown(null); }}
+                  onBlur={() => setActiveField(null)}
+                  autoComplete="off"
                 />
-              </div>
+                <span className={styles.underline} data-active={activeField === 'name'} />
+              </motion.span>
+              
+              <motion.span variants={wordVariants} className={styles.text}> from </motion.span>
+              <motion.span variants={wordVariants} className={styles.inputWrapper}>
+                <input 
+                  type="text" 
+                  name="company"
+                  placeholder="your company"
+                  className={`${styles.input} ${!formState.company ? styles.empty : ''}`}
+                  value={formState.company}
+                  onChange={handleChange}
+                  onFocus={() => { setActiveField('company'); setOpenDropdown(null); }}
+                  onBlur={() => setActiveField(null)}
+                  autoComplete="off"
+                />
+                <span className={styles.underline} data-active={activeField === 'company'} />
+              </motion.span>
+              
+              <motion.span variants={wordVariants} className={styles.text}>. I'm looking for help with </motion.span>
+              
+              <motion.span variants={wordVariants} style={{ display: 'inline-flex', verticalAlign: 'baseline' }}>
+                <CustomSelect 
+                  name="service"
+                  options={services}
+                  value={formState.service}
+                  onChange={(val) => handleSelectChange('service', val)}
+                  placeholder="a project"
+                  isActive={openDropdown === 'service'}
+                  onToggle={setOpenDropdown}
+                />
+              </motion.span>
+              
+              <motion.span variants={wordVariants} className={styles.text}>, and my budget is around </motion.span>
+              
+              <motion.span variants={wordVariants} style={{ display: 'inline-flex', verticalAlign: 'baseline' }}>
+                 <CustomSelect 
+                  name="budget"
+                  options={budgets}
+                  value={formState.budget}
+                  onChange={(val) => handleSelectChange('budget', val)}
+                  placeholder="this range"
+                  isActive={openDropdown === 'budget'}
+                  onToggle={setOpenDropdown}
+                />
+              </motion.span>
+              
+              <motion.span variants={wordVariants} className={styles.text}>. You can reach me at </motion.span>
+              <motion.span variants={wordVariants} className={styles.inputWrapper}>
+                <input 
+                  type="email" 
+                  name="email"
+                  placeholder="my email"
+                  className={`${styles.input} ${!formState.email ? styles.empty : ''}`}
+                  value={formState.email}
+                  onChange={handleChange}
+                  onFocus={() => { setActiveField('email'); setOpenDropdown(null); }}
+                  onBlur={() => setActiveField(null)}
+                  autoComplete="off"
+                />
+                <span className={styles.underline} data-active={activeField === 'email'} />
+              </motion.span>
+              
+              <motion.span variants={wordVariants} className={styles.text}> to start the conversation.</motion.span>
+            </p>
 
-              <button type="submit" className={styles.submitButton}>
-                Send Message
-                <Send size={18} />
-              </button>
-            </form>
+            {/* Submit Button */}
+            <motion.div className={styles.submitWrapper} variants={wordVariants}>
+              <motion.button 
+                type="submit" 
+                className={styles.submitButton}
+                disabled={!isValid}
+                animate={{ 
+                  opacity: isValid ? 1 : 0.3, 
+                  scale: isValid ? 1 : 0.95,
+                  filter: isValid ? 'grayscale(0%)' : 'grayscale(100%)' 
+                }}
+                whileHover={isValid ? { scale: 1.05 } : {}}
+                whileTap={isValid ? { scale: 0.98 } : {}}
+                data-cursor="Let's Go"
+              >
+                Send Request <ArrowRight size={20} />
+              </motion.button>
+            </motion.div>
+
+          </motion.form>
+        ) : (
+          <motion.div 
+            className={styles.successMessage}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
+            <motion.div 
+              className={styles.successIcon}
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ type: 'spring', stiffness: 200, damping: 10, delay: 0.2 }}
+            >
+              <Check size={40} />
+            </motion.div>
+            <h2>Message Received.</h2>
+            <p>Signal established. We'll be in touch within 24 hours.</p>
+            <button 
+              className={styles.resetBtn} 
+              onClick={() => {
+                setIsSubmitted(false); 
+                setFormState({ name: '', company: '', email: '', service: '', budget: '' });
+              }}>
+              Send another
+            </button>
           </motion.div>
+        )}
+      </div>
+
+      <motion.div 
+        className={styles.contactInfoFooter}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.5 }}
+        transition={{ delay: 1.5 }}
+      >
+        <div className={styles.footerItem}>
+          <span>Email</span>
+          <a href="mailto:hello@zlaark.com" data-cursor="Copy">hello@zlaark.com</a>
         </div>
-      </section>
+        <div className={styles.footerItem}>
+          <span>Based In</span>
+          <p>Global / Amritsar</p>
+        </div>
+        <div className={styles.footerItem}>
+          <span>Socials</span>
+          <div className={styles.socials}>
+            <a href="#">LN</a>
+            <a href="#">TW</a>
+            <a href="#">IG</a>
+          </div>
+        </div>
+      </motion.div>
     </main>
   );
 }
