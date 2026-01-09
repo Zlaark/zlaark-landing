@@ -225,7 +225,6 @@ export default function WorkPage() {
                     <motion.div
                         key={project.id}
                         className={`${styles.projectItem} ${activeId === project.id ? styles.active : ''}`}
-                        onMouseEnter={() => setActiveId(project.id)}
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ delay: index * 0.05 }}
