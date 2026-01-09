@@ -1,305 +1,231 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useVelocity, MotionValue } from 'framer-motion';
 import Link from 'next/link';
+import { useRef, useState, useEffect } from 'react';
 import { ArrowRight, ArrowLeft } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import styles from './CaseStudy.module.css';
 
-// Sample project data (in production, this would come from a CMS or API)
+// --- DATA ---
 const projectsData: Record<string, any> = {
   'venture-core': {
     title: 'Venture Core',
     category: 'FinTech Platform',
     heroImage: 'https://picsum.photos/id/20/1920/1080',
-    meta: {
-      client: 'Venture Core Inc.',
-      industry: 'Financial Technology',
-      services: 'Web Design, Development',
-      timeline: '12 Weeks',
-    },
-    challenge: {
-      title: 'Reimagining Investment',
-      text: `Venture Core approached us with a clear mission: disrupt the traditional investment landscape by creating a platform that makes sophisticated trading accessible to everyone.
-
-Their existing platform was functional but lacked the polish and intuitive design needed to inspire confidence in first-time investors. The challenge was to balance complex financial data with an approachable, elegant interface.`,
-    },
-    solution: {
-      title: 'Design That Builds Trust',
-      text: `We developed a comprehensive design system that prioritizes clarity without sacrificing depth. Every element was crafted to reduce cognitive load while providing power users with the tools they need.
-
-Key innovations included a real-time portfolio visualization system, contextual tooltips for financial terminology, and a progressive disclosure approach that reveals complexity only when needed.`,
-    },
-    results: [
-      { number: '340%', label: 'User Engagement Increase' },
-      { number: '$2M', label: 'Series A Funding Raised' },
-      { number: '4.9', label: 'App Store Rating' },
+    description: 'Democratizing algorithmic trading for the modern investor.',
+    meta: { client: 'Venture Core', services: 'Web Design', timeline: '12 Weeks' },
+    sections: [
+      { title: 'The Challenge', content: 'Disrupt the traditional investment landscape.', image: 'https://picsum.photos/id/21/1200/900' },
+      { title: 'The Solution', content: 'Progressive disclosure design system.', image: 'https://picsum.photos/id/22/1200/900' }
     ],
-    gallery: [
-      { src: 'https://picsum.photos/id/21/1200/750', large: true },
-      { src: 'https://picsum.photos/id/22/600/400', large: false },
-      { src: 'https://picsum.photos/id/23/600/400', large: false },
-    ],
-    testimonial: {
-      quote: "Zlaark didn't just redesign our platform—they transformed how our users think about investing. The results speak for themselves.",
-      author: 'Michael Chen',
-      role: 'CEO, Venture Core',
-    },
-    navigation: {
-      prev: { slug: 'quant-x', title: 'Quant X' },
-      next: { slug: 'nebula-stream', title: 'Nebula Stream' },
-    },
+    results: [{ number: '340%', label: 'Engagement' }, { number: '$2M', label: 'Funding' }, { number: '4.9', label: 'Rating' }],
+    gallery: [ 'https://picsum.photos/id/23/1600/900', 'https://picsum.photos/id/24/800/1200', 'https://picsum.photos/id/25/800/1200', 'https://picsum.photos/id/26/1600/900' ],
+    next: { slug: 'nebula-stream', title: 'Nebula Stream', image: 'https://picsum.photos/id/26/1920/1080' },
   },
   'nebula-stream': {
     title: 'Nebula Stream',
-    category: 'Streaming Platform',
+    category: 'Streaming',
     heroImage: 'https://picsum.photos/id/26/1920/1080',
-    meta: {
-      client: 'Nebula Media',
-      industry: 'Entertainment',
-      services: 'Mobile App, Web App',
-      timeline: '16 Weeks',
-    },
-    challenge: {
-      title: 'Competing with Giants',
-      text: `In a market dominated by streaming giants, Nebula needed a platform that could carve out its niche. They wanted to focus on independent artists and curated playlists.
-
-The challenge was creating an experience that felt premium while highlighting the human curation that sets them apart from algorithm-driven competitors.`,
-    },
-    solution: {
-      title: 'Human-Centered Streaming',
-      text: `We designed a platform that puts curators front and center. Each playlist tells a story, with rich editorial content that gives context to the music.
-
-The interface celebrates album art and artist photography, creating an immersive visual experience that honors the craft of music creation.`,
-    },
-    results: [
-      { number: '2.5M', label: 'Monthly Active Users' },
-      { number: '89%', label: 'User Retention Rate' },
-      { number: '15min', label: 'Avg. Session Duration' },
-    ],
-    gallery: [
-      { src: 'https://picsum.photos/id/27/1200/750', large: true },
-      { src: 'https://picsum.photos/id/28/600/400', large: false },
-      { src: 'https://picsum.photos/id/29/600/400', large: false },
-    ],
-    testimonial: {
-      quote: "They understood our vision from day one. The platform they built isn't just beautiful—it's a statement about what streaming can be.",
-      author: 'Sarah Lin',
-      role: 'Founder, Nebula Media',
-    },
-    navigation: {
-      prev: { slug: 'venture-core', title: 'Venture Core' },
-      next: { slug: 'apex-health', title: 'Apex Health' },
-    },
+    description: 'A human-centric streaming platform.',
+    meta: { client: 'Nebula Media', services: 'Mobile App', timeline: '16 Weeks' },
+    sections: [
+        { title: 'Philosophy', content: 'Bring humanity back to music discovery.', image: 'https://picsum.photos/id/27/1200/900' },
+        { title: 'The Craft', content: 'Every playlist is a magazine issue.', image: 'https://picsum.photos/id/28/1200/900' }
+      ],
+    results: [{ number: '2.5M', label: 'Users' }, { number: '89%', label: 'Retention' }, { number: '15m', label: 'Avg Session' }],
+    gallery: [ 'https://picsum.photos/id/29/1600/900', 'https://picsum.photos/id/30/800/1200', 'https://picsum.photos/id/31/800/1200', 'https://picsum.photos/id/32/1600/900' ],
+    next: { slug: 'venture-core', title: 'Venture Core', image: 'https://picsum.photos/id/20/1920/1080' },
   },
 };
 
-// Default fallback for unknown slugs
-const defaultProject = {
-  title: 'Project',
-  category: 'Case Study',
-  heroImage: 'https://picsum.photos/id/30/1920/1080',
-  meta: {
-    client: 'Client Name',
-    industry: 'Industry',
-    services: 'Services',
-    timeline: 'Timeline',
-  },
-  challenge: {
-    title: 'The Challenge',
-    text: 'Challenge description goes here.',
-  },
-  solution: {
-    title: 'Our Solution',
-    text: 'Solution description goes here.',
-  },
-  results: [
-    { number: '100%', label: 'Improvement' },
-  ],
-  gallery: [],
-  testimonial: {
-    quote: 'Great work!',
-    author: 'Client',
-    role: 'Role',
-  },
-  navigation: {
-    prev: null,
-    next: null,
-  },
+const defaultProject = { ...projectsData['venture-core'], title: 'Project Not Found' };
+
+// --- COMPONENTS ---
+
+// Horizontal Scroll Gallery Component
+const HorizontalGallery = ({ images }: { images: string[] }) => {
+    const targetRef = useRef<HTMLDivElement>(null);
+    const { scrollYProgress } = useScroll({ target: targetRef });
+    const x = useTransform(scrollYProgress, [0, 1], ["0%", "-75%"]);
+
+    return (
+        <section ref={targetRef} className={styles.horizontalSection}>
+            <div className={styles.stickyContainer}>
+                <h3 className={styles.galleryTitle}>Visual Exploration</h3>
+                <motion.div style={{ x }} className={styles.horizontalTrack}>
+                    {images.map((src, i) => (
+                        <div key={i} className={styles.horizontalCard}>
+                            <img src={src} alt={`Gallery ${i}`} />
+                        </div>
+                    ))}
+                </motion.div>
+            </div>
+        </section>
+    );
 };
+
+// Skew Parallax Text (Velocity)
+const SkewText = ({ children, className }: { children: React.ReactNode, className?: string }) => {
+    const { scrollY } = useScroll();
+    const scrollVelocity = useVelocity(scrollY);
+    const skew = useSpring(useTransform(scrollVelocity, [-1000, 1000], [10, -10]), { stiffness: 400, damping: 90 });
+
+    return (
+        <motion.div style={{ skewX: skew }} className={className}>
+            {children}
+        </motion.div>
+    );
+};
+
+// Parallax Rotate Image
+const ParallaxRotateImage = ({ src, alt }: { src: string, alt: string }) => {
+    const ref = useRef(null);
+    const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+    const rotate = useTransform(scrollYProgress, [0, 1], [-5, 5]);
+    const scale = useTransform(scrollYProgress, [0, 0.5, 1], [0.9, 1, 0.9]);
+    
+    return (
+        <motion.div ref={ref} style={{ rotate, scale }} className={styles.parallaxRotateWrapper}>
+            <img src={src} alt={alt} />
+        </motion.div>
+    );
+};
+
+// Magnetic Button
+const MagneticButton = ({ children, href }: { children: React.ReactNode, href: string }) => {
+    const ref = useRef<HTMLDivElement>(null);
+    const [position, setPosition] = useState({ x: 0, y: 0 });
+
+    const handleMouseMove = (e: React.MouseEvent) => {
+        const { clientX, clientY } = e;
+        const { left, top, width, height } = ref.current!.getBoundingClientRect();
+        const center = { x: left + width / 2, y: top + height / 2 };
+        const distance = { x: clientX - center.x, y: clientY - center.y };
+        
+        // Pull strength
+        setPosition({ x: distance.x * 0.3, y: distance.y * 0.3 });
+    }
+
+    const handleMouseLeave = () => {
+        setPosition({ x: 0, y: 0 });
+    }
+
+    return (
+        <motion.div 
+            ref={ref}
+            animate={{ x: position.x, y: position.y }}
+            transition={{ type: "spring", stiffness: 150, damping: 15, mass: 0.1 }}
+            onMouseMove={handleMouseMove}
+            onMouseLeave={handleMouseLeave}
+        >
+             <Link href={href} className={styles.magneticButton}>
+                {children}
+             </Link>
+        </motion.div>
+    )
+}
 
 export default function CaseStudyPage() {
-  const params = useParams();
-  const slug = params.slug as string;
-  const project = projectsData[slug] || defaultProject;
+    const params = useParams();
+    const slug = params.slug as string;
+    const project = projectsData[slug] || defaultProject;
+
+    const heroRef = useRef(null);
+    const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+    const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+    const opacity = useTransform(scrollYProgress, [0, 0.8], [1, 0]);
 
   return (
     <main className={styles.page}>
+      
       {/* ===== HERO ===== */}
-      <section className={styles.hero}>
-        <div className={styles.heroImage}>
+      <section className={styles.hero} ref={heroRef}>
+        <motion.div style={{ y, opacity }} className={styles.heroBackground}>
           <img src={project.heroImage} alt={project.title} />
-        </div>
-        <div className={styles.heroOverlay} />
-        <motion.div
-          className={styles.heroContent}
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-        >
-          <span className={styles.heroCategory}>{project.category}</span>
-          <h1 className={styles.heroTitle}>{project.title}</h1>
+          <div className={styles.overlay} />
         </motion.div>
-      </section>
+        
+        <div className={styles.heroContent}>
+            <SkewText className={styles.heroMetaWrapper}>
+                <span className={styles.categoryPill}>{project.category}</span>
+                <span className={styles.year}>2024</span>
+            </SkewText>
 
-      {/* ===== META INFO ===== */}
-      <section className={styles.metaSection}>
-        <div className={styles.metaGrid}>
-          <div className={styles.metaItem}>
-            <span className={styles.metaLabel}>Client</span>
-            <span className={styles.metaValue}>{project.meta.client}</span>
-          </div>
-          <div className={styles.metaItem}>
-            <span className={styles.metaLabel}>Industry</span>
-            <span className={styles.metaValue}>{project.meta.industry}</span>
-          </div>
-          <div className={styles.metaItem}>
-            <span className={styles.metaLabel}>Services</span>
-            <span className={styles.metaValue}>{project.meta.services}</span>
-          </div>
-          <div className={styles.metaItem}>
-            <span className={styles.metaLabel}>Timeline</span>
-            <span className={styles.metaValue}>{project.meta.timeline}</span>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== CHALLENGE ===== */}
-      <section className={styles.contentSection}>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <span className={styles.sectionLabel}>The Challenge</span>
-          <h2 className={styles.sectionTitle}>{project.challenge.title}</h2>
-          <div className={styles.sectionText}>
-            {project.challenge.text.split('\n\n').map((p: string, i: number) => (
-              <p key={i}>{p}</p>
-            ))}
-          </div>
-        </motion.div>
-      </section>
-
-      {/* ===== SOLUTION ===== */}
-      <section className={styles.contentSection}>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <span className={styles.sectionLabel}>Our Approach</span>
-          <h2 className={styles.sectionTitle}>{project.solution.title}</h2>
-          <div className={styles.sectionText}>
-            {project.solution.text.split('\n\n').map((p: string, i: number) => (
-              <p key={i}>{p}</p>
-            ))}
-          </div>
-        </motion.div>
-      </section>
-
-      {/* ===== RESULTS ===== */}
-      <section className={styles.resultsSection}>
-        <div className={styles.resultsGrid}>
-          {project.results.map((result: any, i: number) => (
-            <motion.div
-              key={i}
-              className={styles.resultItem}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1 }}
+            <SkewText>
+                <h1 className={styles.title}>{project.title}</h1>
+            </SkewText>
+            
+            <motion.p 
+                className={styles.intro}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.5 }}
             >
-              <span className={styles.resultNumber}>{result.number}</span>
-              <span className={styles.resultLabel}>{result.label}</span>
-            </motion.div>
+                {project.description}
+            </motion.p>
+        </div>
+      </section>
+
+      {/* ===== META DATA ===== */}
+      <section className={styles.metaStrip}>
+        <div className={styles.metaGrid}>
+          {Object.entries(project.meta).map(([key, value]) => (
+            <div key={key}>
+               <span className={styles.metaLabel}>{key}</span>
+               <span className={styles.metaValue}>{value as string}</span>
+            </div>
           ))}
         </div>
       </section>
 
-      {/* ===== GALLERY ===== */}
-      {project.gallery.length > 0 && (
-        <section className={styles.gallerySection}>
-          <div className={styles.galleryGrid}>
-            {project.gallery.map((img: any, i: number) => (
-              <motion.div
-                key={i}
-                className={`${styles.galleryImage} ${img.large ? styles.large : ''}`}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1 }}
-              >
-                <img src={img.src} alt={`${project.title} gallery ${i + 1}`} />
-              </motion.div>
+      {/* ===== NARRATIVE (Parallax Rotate) ===== */}
+      <div className={styles.narrativeContainer}>
+        {project.sections.map((section: any, idx: number) => (
+            <section key={idx} className={styles.narrativeSection}>
+                 <div className={styles.narrativeText}>
+                    <h3 className={styles.sectionTitle}>{section.title}</h3>
+                    <p className={styles.paragraph}>{section.content}</p>
+                </div>
+                 <div className={styles.narrativeVisual}>
+                    <ParallaxRotateImage src={section.image} alt={section.title} />
+                </div>
+            </section>
+        ))}
+      </div>
+
+       {/* ===== HORIZONTAL SCROLL GALLERY ===== */}
+       <HorizontalGallery images={project.gallery} />
+
+      {/* ===== RESULTS ===== */}
+      <section className={styles.resultsSection}>
+        <div className={styles.resultsGrid}>
+            {project.results.map((res: any, idx: number) => (
+                <div key={idx} className={styles.resultItem}>
+                    <span className={styles.resultNumber}>{res.number}</span>
+                    <span className={styles.resultLabel}>{res.label}</span>
+                </div>
             ))}
-          </div>
-        </section>
-      )}
-
-      {/* ===== TESTIMONIAL ===== */}
-      <section className={styles.testimonialSection}>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <p className={styles.testimonialQuote}>"{project.testimonial.quote}"</p>
-          <p className={styles.testimonialAuthor}>
-            <strong>{project.testimonial.author}</strong>
-            {project.testimonial.role}
-          </p>
-        </motion.div>
-      </section>
-
-      {/* ===== NAVIGATION ===== */}
-      <section className={styles.navSection}>
-        <div className={styles.navGrid}>
-          {project.navigation.prev && (
-            <Link href={`/work/${project.navigation.prev.slug}`} className={styles.navItem}>
-              <span className={styles.navLabel}>
-                <ArrowLeft size={14} style={{ marginRight: '0.5rem' }} />
-                Previous Project
-              </span>
-              <span className={styles.navTitle}>{project.navigation.prev.title}</span>
-            </Link>
-          )}
-          {project.navigation.next && (
-            <Link href={`/work/${project.navigation.next.slug}`} className={`${styles.navItem} ${styles.next}`}>
-              <span className={styles.navLabel}>
-                Next Project
-                <ArrowRight size={14} style={{ marginLeft: '0.5rem' }} />
-              </span>
-              <span className={styles.navTitle}>{project.navigation.next.title}</span>
-            </Link>
-          )}
         </div>
       </section>
 
-      {/* ===== CTA ===== */}
-      <section className={styles.ctaSection}>
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
-          <h2 className={styles.ctaTitle}>Ready to Start Your Project?</h2>
-          <Link href="/book" className={styles.ctaButton}>
-            Schedule a Consultation
-            <ArrowRight size={18} />
-          </Link>
-        </motion.div>
-      </section>
+      {/* ===== NEXT PROJECT (Magnetic Interactive) ===== */}
+      {project.next && (
+          <section className={styles.nextProject}>
+            <div className={styles.nextImageBg}>
+                <img src={project.next.image} alt="Next" />
+                <div className={styles.nextOverlay} />
+            </div>
+            
+            <div className={styles.nextCenter}>
+                <span className={styles.nextLabel}>Next Case Study</span>
+                <MagneticButton href={`/work/${project.next.slug}`}>
+                    <h2 className={styles.nextTitle}>{project.next.title}</h2>
+                </MagneticButton>
+            </div>
+          </section>
+      )}
+
     </main>
   );
 }
