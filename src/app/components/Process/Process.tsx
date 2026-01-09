@@ -124,12 +124,15 @@ const Card = ({ i, step, progress, range, targetScale }: { i: number, step: any,
     const scale = useTransform(progress, range, [1, targetScale]);
     
     // Theme-aware brightness: Dark mode fades to dark, Light mode stays mostly bright
-    const brightnessEnd = theme === 'light' ? "brightness(100%)" : "brightness(40%)";
+    // Last card should never fade as it's the final focus
+    const isLast = i === 5; // steps.length is 6
+    const baseBrightness = "brightness(80%)"; // Lighter than 40%
+    const brightnessEnd = theme === 'light' ? "brightness(100%)" : (isLast ? "brightness(100%)" : baseBrightness);
     const filter = useTransform(progress, range, ["brightness(100%)", brightnessEnd]);
     
     // Check if mobile for reduced stacking offset
     const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-    const stackOffset = isMobile ? 13 : 40;
+    const stackOffset = isMobile ? 15 : 40;
     
     // Mouse tracking for spotlight
     const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
@@ -182,13 +185,14 @@ export default function Process() {
         <div className={styles.cardsContainer}>
             {steps.map((step, i) => {
                 const targetScale = 1 - ( (steps.length - i) * 0.05);
+                const stepSize = 0.16; // 1/6 is approx 0.166
                 return (
                     <Card 
                         key={i} 
                         i={i} 
                         step={step} 
                         progress={scrollYProgress} 
-                        range={[i * 0.25, 1]}
+                        range={[i * stepSize, 1]}
                         targetScale={targetScale} 
                     />
                 );

@@ -8,41 +8,26 @@ interface ThemeProviderProps {
 }
 
 export default function ThemeProvider({ children }: ThemeProviderProps) {
-  const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [theme] = useState<'dark'>('dark');
+  const [isTransitioning] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  // Initialize theme from localStorage or system preference
+  // Initialize - basically just set mounted
   useEffect(() => {
-    const stored = localStorage.getItem('zlaark-theme');
-    if (stored === 'light' || stored === 'dark') {
-      setTheme(stored);
-    } else if (window.matchMedia('(prefers-color-scheme: light)').matches) {
-      setTheme('light');
-    }
     setMounted(true);
   }, []);
 
-  // Apply theme to document
+  // Apply theme to document (always dark)
   useEffect(() => {
     if (mounted) {
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('zlaark-theme', theme);
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem('zlaark-theme', 'dark');
     }
-  }, [theme, mounted]);
+  }, [mounted]);
 
   const toggleTheme = useCallback(() => {
-    setIsTransitioning(true);
-    
-    // Theme changes at 50% of animation (500ms into 1000ms animation)
-    setTimeout(() => {
-      setTheme(prev => prev === 'dark' ? 'light' : 'dark');
-    }, 500);
-    
-    // Transition complete
-    setTimeout(() => {
-      setIsTransitioning(false);
-    }, 1200);
+    // Disabled - theme is forced to dark
+    console.log('Theme toggling is disabled.');
   }, []);
 
   // Prevent flash of wrong theme during hydration

@@ -7,6 +7,7 @@ import CustomCursor from "./components/CustomCursor/CustomCursor";
 import ThemeProvider from "./context/ThemeProvider";
 import ThemeToggle from "./components/ThemeToggle/ThemeToggle";
 import Navbar from "./components/Navbar/Navbar";
+import CinematicGrain from "./components/Effects/CinematicGrain";
 
 const cinzel = Cinzel({
   variable: "--font-heading",
@@ -68,6 +69,7 @@ export default function RootLayout({
       <body className={`${cinzel.variable} ${inter.variable}`}>
         <ThemeProvider>
           <CustomCursor />
+          <CinematicGrain />
           {/* <ThemeToggle /> */}
           <Navbar />
           <PageWrapper>

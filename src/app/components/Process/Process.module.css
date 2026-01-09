@@ -64,9 +64,9 @@
 
 .card {
   width: 100%;
-  max-width: 1200px;
-  height: 65vh;
-  min-height: 500px;
+  max-width: 1000px;
+  height: 55vh;
+  min-height: 400px;
   /* Ensure content fits on short screens */
   /* Fixed height for card content */
   background: var(--card-bg);

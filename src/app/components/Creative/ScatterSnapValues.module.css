@@ -1,0 +1,156 @@
+.section {
+  padding: 10rem var(--page-padding);
+  background: var(--bg-color);
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 6rem;
+  position: relative;
+  z-index: 2;
+}
+
+.label {
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  color: var(--accent-color);
+  letter-spacing: 0.3rem;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 400;
+  line-height: 1.1;
+  color: var(--text-color);
+}
+
+.highlight {
+  color: var(--accent-color);
+  font-style: italic;
+}
+
+.subtitle {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-top: 1.5rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  max-width: 900px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 2;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+
+.card:hover {
+  border-color: var(--accent-color);
+}
+
+.card:hover .cornerAccent {
+  width: 60px;
+  height: 60px;
+}
+
+.card:hover .connector {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
+.iconWrapper {
+  width: 50px;
+  height: 50px;
+  border: 1px solid var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-color);
+  margin-bottom: 1.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+.cardTitle {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  font-weight: 400;
+  margin-bottom: 0.75rem;
+  color: var(--text-color);
+}
+
+.cardDesc {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Corner accent - grows on hover */
+.cornerAccent {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 30px;
+  height: 30px;
+  border-top: 2px solid var(--accent-color);
+  border-right: 2px solid var(--accent-color);
+  transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+  opacity: 0.5;
+}
+
+/* Connector line between cards */
+.connector {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+  transform: scaleX(0);
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+/* Background connecting lines SVG */
+.lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Light theme adjustments */
+[data-theme="light"] .card {
+  background: rgba(255, 255, 255, 0.8);
+}

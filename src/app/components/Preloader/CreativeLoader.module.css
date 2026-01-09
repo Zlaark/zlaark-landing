@@ -1,0 +1,76 @@
+.loaderContainer {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  /* Let clicks pass only after exit, but handled by React removal */
+}
+
+/* CURTAINS */
+.curtain {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  background: #000;
+  /* Void Color */
+  z-index: 10;
+}
+
+.curtainLeft {
+  left: 0;
+}
+
+.curtainRight {
+  right: 0;
+}
+
+/* CONTENT */
+.content {
+  position: relative;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.svgLine {
+  width: 200px;
+  height: 2px;
+  overflow: visible;
+  margin-bottom: 2rem;
+}
+
+.goldLine {
+  stroke: var(--accent-color, #d4af37);
+  stroke-width: 2px;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.8));
+}
+
+.logoWrapper {
+  margin-bottom: 1rem;
+}
+
+.logo {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 10vw, 6rem);
+  color: #fff;
+  font-weight: 400;
+  text-transform: uppercase;
+}
+
+.terminalText {
+  font-family: monospace;
+  font-size: 0.8rem;
+  color: var(--accent-color, #d4af37);
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+  text-transform: uppercase;
+  min-height: 1.2em;
+}

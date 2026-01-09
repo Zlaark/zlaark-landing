@@ -10,13 +10,14 @@ import Footer from './components/Footer/Footer';
 import Clients from './components/Clients/Clients';
 import TechStack from './components/TechStack/TechStack';
 import Testimonials from './components/Testimonials/Testimonials';
+import StickyValues from './components/Values/StickyValues';
 
 export default function Home() {
   return (
     <main>
       <Hero />
       <Clients />
-      <Values /> {/* Swapped Order for better flow */}
+      <StickyValues /> {/* Accordion Animation from original Home */}
       <Services />
       <TechStack />
       <Process />

@@ -1,314 +1,89 @@
 .section {
-  padding: 6rem var(--page-padding);
+  padding: 8rem var(--page-padding);
   background: var(--bg-color);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
 }
 
 .header {
-  margin-bottom: 4rem;
-  text-align: left;
-  max-width: 600px;
-  position: relative;
-  z-index: 2;
+  text-align: center;
+  margin-bottom: 5rem;
 }
 
 .label {
   font-family: var(--font-body);
-  color: var(--accent-color);
-  font-size: 0.8rem;
-  letter-spacing: 0.3rem;
-  text-transform: uppercase;
-  display: block;
-  margin-bottom: 1rem;
-  opacity: 0.8;
-}
-
-.title {
-  font-family: var(--font-heading);
-  font-weight: 400;
-  line-height: 1.1;
-}
-
-.titleLine1 {
-  font-size: 1.5rem;
+  font-size: 0.9rem;
   color: var(--accent-color);
   letter-spacing: 0.2rem;
   text-transform: uppercase;
   display: block;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
-.titleLine2 {
-  font-size: clamp(3rem, 5vw, 4.5rem);
-  color: var(--text-color);
-  display: block;
+.title {
+  font-family: var(--font-heading);
+  font-size: 3.5rem;
+  font-weight: 400;
 }
 
-.container {
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.gridCard {
+  background: var(--card-bg);
+  padding: 3rem;
+  border: 1px solid var(--border-color);
+  transition: transform 0.3s, border-color 0.3s;
+}
+
+.gridCard:hover {
+  transform: translateY(-5px);
+  border-color: var(--accent-color);
+}
+
+.cardHeader {
   display: flex;
-  width: 100%;
-  height: 600px;
-  gap: 1px;
-  z-index: 2;
-  position: relative;
-  background: var(--border-color);
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.cardNumber {
+  font-family: var(--font-heading);
+  font-size: 1.5rem;
+  color: var(--text-muted);
+  opacity: 0.3;
+}
+
+.iconWrapper {
+  color: var(--accent-color);
+}
+
+.gridTitle {
+  font-family: var(--font-heading);
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  font-weight: 400;
+}
+
+.gridDesc {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: var(--text-muted);
+  line-height: 1.6;
 }
 
 @media (max-width: 768px) {
   .section {
     padding: 4rem var(--page-padding);
-    min-height: auto;
   }
 
-  .container {
-    flex-direction: column;
-    height: auto;
-    gap: 1rem;
-    background: transparent;
-  }
-
-  .card {
-    border-radius: 12px;
-    height: 400px;
-    /* Fixed height for stacked cards */
-    flex: 1 !important;
-    /* Override inline styles from framer-motion if possible, but JS might override this. */
-  }
-
-  .header {
-    margin-bottom: 3rem;
-  }
-
-  .titleLine2 {
+  .title {
     font-size: 2.5rem;
   }
 
-  .spine {
-    display: flex;
-    position: static;
-    transform: none;
-    width: auto;
-    height: auto;
-    flex-direction: row;
-    padding-top: 1rem;
+  .grid {
+    grid-template-columns: 1fr;
   }
-
-  .verticalText {
-    writing-mode: horizontal-tb;
-    transform: none;
-    font-size: 1.5rem;
-    color: var(--text-color);
-    opacity: 1;
-  }
-
-  /* Force content visibility if JS logic allows, otherwise JS logic needs update. 
-     Since JS uses state for activeId, we rely on user tapping to expand. */
-}
-
-.card {
-  position: relative;
-  height: 100%;
-  background: var(--card-bg);
-  overflow: hidden;
-  cursor: pointer;
-  transition: flex 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-/* Silk Texture Overlay */
-.silkLayer {
-  position: absolute;
-  inset: 0;
-  background-size: 200% 200%;
-  opacity: 0;
-  transition: opacity 1s ease;
-  z-index: 0;
-  filter: contrast(1.2) brightness(0.8);
-}
-
-[data-theme="light"] .silkLayer {
-  filter: contrast(1.1) brightness(1.1);
-  /* Brighter for light mode */
-}
-
-/* Grain Overlay */
-.grain {
-  position: absolute;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.05'/%3E%3C/svg%3E");
-  opacity: 0.3;
-  pointer-events: none;
-  z-index: 1;
-}
-
-/* Glass Reflection Sheen */
-.sheen {
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transform: skewX(-20deg);
-  pointer-events: none;
-  z-index: 3;
-  transition: left 0s;
-}
-
-.card:hover .sheen {
-  left: 200%;
-  transition: left 1.5s ease-in-out;
-}
-
-
-/* Gradient Themes - Deeper & Richer */
-.themeGold .silkLayer {
-  background-image: radial-gradient(circle at 50% 0%, #3e3200, #1a1500, #0a0a0a);
-  animation: pulseGlow 8s ease infinite;
-}
-
-.themeBlue .silkLayer {
-  background-image: radial-gradient(circle at 50% 0%, #002a3e, #00121a, #0a0a0a);
-  animation: pulseGlow 10s ease infinite;
-}
-
-.themePurple .silkLayer {
-  background-image: radial-gradient(circle at 50% 0%, #2a003e, #12001a, #0a0a0a);
-  animation: pulseGlow 12s ease infinite;
-}
-
-.themeSilver .silkLayer {
-  background-image: radial-gradient(circle at 50% 0%, #252525, #101010, #0a0a0a);
-  animation: pulseGlow 9s ease infinite;
-}
-
-/* Light Theme Gradients - Soft & Elegant */
-[data-theme="light"] .themeGold .silkLayer {
-  background-image: radial-gradient(circle at 50% 0%, #fdf8eb, #f4e8cb, #ffffff);
-}
-
-[data-theme="light"] .themeBlue .silkLayer {
-  background-image: radial-gradient(circle at 50% 0%, #ebf5fd, #cbe4f4, #ffffff);
-}
-
-[data-theme="light"] .themePurple .silkLayer {
-  background-image: radial-gradient(circle at 50% 0%, #f5ebfd, #e4cbf4, #ffffff);
-}
-
-[data-theme="light"] .themeSilver .silkLayer {
-  background-image: radial-gradient(circle at 50% 0%, #f5f5f5, #e0e0e0, #ffffff);
-}
-
-@keyframes pulseGlow {
-  0% {
-    transform: scale(1);
-    opacity: 0.5;
-  }
-
-  50% {
-    transform: scale(1.1);
-    opacity: 0.8;
-  }
-
-  100% {
-    transform: scale(1);
-    opacity: 0.5;
-  }
-}
-
-.cardInner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  padding: 3rem;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  z-index: 2;
-  background: linear-gradient(to bottom, transparent 20%, rgba(0, 0, 0, 0.8) 100%);
-}
-
-[data-theme="light"] .cardInner {
-  background: linear-gradient(to bottom, transparent 20%, rgba(255, 255, 255, 0.6) 100%);
-}
-
-.topRow {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.number {
-  font-family: var(--font-heading);
-  font-size: 1.2rem;
-  color: rgba(255, 255, 255, 0.2);
-  letter-spacing: 0.1em;
-}
-
-[data-theme="light"] .number {
-  color: var(--text-muted);
-  opacity: 0.3;
-}
-
-.icon {
-  color: var(--accent-color);
-  filter: drop-shadow(0 0 15px rgba(212, 175, 55, 0.3));
-}
-
-.content {
-  margin-top: auto;
-}
-
-.cardTitle {
-  font-family: var(--font-heading);
-  font-size: 2.5rem;
-  color: var(--text-color);
-  margin-bottom: 2rem;
-  font-weight: 400;
-  white-space: nowrap;
-}
-
-.cardDesc {
-  font-family: var(--font-body);
-  font-size: 1.1rem;
-  color: var(--text-muted);
-  line-height: 1.7;
-  max-width: 450px;
-  border-top: 1px solid var(--border-color);
-  padding-top: 2rem;
-}
-
-.spine {
-  position: absolute;
-  bottom: 3rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 2rem;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 2rem;
-}
-
-.verticalText {
-  writing-mode: vertical-rl;
-  transform: rotate(180deg);
-  font-family: var(--font-heading);
-  font-size: 1.2rem;
-  letter-spacing: 0.2rem;
-  color: var(--text-muted);
-  text-transform: uppercase;
-  white-space: nowrap;
-  transition: color 0.3s;
-}
-
-.card:hover .verticalText {
-  color: var(--text-color);
 }

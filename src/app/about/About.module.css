@@ -11,8 +11,8 @@
   min-height: 90vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 0 var(--page-padding);
+  justify-content: flex-start;
+  padding: 220px var(--page-padding) 4rem;
 }
 
 .heroBackground {
@@ -26,6 +26,8 @@
   position: relative;
   z-index: 2;
   text-align: center;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .heroLabel {
@@ -39,24 +41,52 @@
   opacity: 0.8;
 }
 
-.heroTitle {
-  font-family: var(--font-heading);
-  font-size: 15vw;
-  font-weight: 400;
+/* ===== KINETIC HERO ===== */
+.kineticTitle {
+  margin: 4rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+  /* Hide overflow from parallax */
+}
+
+.parallaxLine {
+  white-space: nowrap;
   line-height: 0.85;
-  margin-bottom: 4rem;
-  letter-spacing: -0.02em;
+}
+
+.parallaxLine span {
+  font-family: var(--font-heading);
+  font-size: clamp(60px, 11vw, 200px);
+  /* Massive text */
+  font-weight: 400;
+  display: block;
+  letter-spacing: -0.04em;
   color: var(--text-color);
+  transition: color 0.3s;
+}
+
+.parallaxLine:hover span {
+  color: var(--accent-color);
+  /* Interactive hover */
+  -webkit-text-stroke: 0px;
 }
 
 .heroSubtitle {
   font-family: var(--font-body);
   font-size: 1.4rem;
   color: var(--text-muted);
-  max-width: 600px;
+  max-width: 700px;
   margin: 0 auto;
   line-height: 1.6;
   font-weight: 300;
+}
+
+/* ===== CLIENTS SECTION ===== */
+.clientsSection {
+  padding: 4rem var(--page-padding);
+  margin-bottom: 4rem;
 }
 
 /* ===== STORY SECTION ===== */
@@ -122,7 +152,6 @@
   height: 600px;
   border-radius: 4px;
   overflow: hidden;
-  /* Replaced borders with cleaner look */
   background: linear-gradient(135deg, rgba(212, 175, 55, 0.05), rgba(0, 0, 0, 0.02));
 }
 
@@ -216,7 +245,6 @@
 }
 
 .teamCard {
-  group: 1;
   background: transparent;
   border: none;
   border-radius: 0;
@@ -263,71 +291,77 @@
   letter-spacing: 0.1em;
 }
 
-.teamSocial {
-  margin-top: 1.5rem;
-  display: flex;
-  gap: 1.5rem;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: all 0.3s;
-}
-
-.teamCard:hover .teamSocial {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.teamSocial a {
-  color: var(--text-muted);
-  transition: color 0.3s;
-}
-
-.teamSocial a:hover {
-  color: var(--accent-color);
-}
-
-/* ===== VALUES SECTION ===== */
-.valuesSection {
-  padding: 10rem var(--page-padding);
+/* ===== STICKY VALUES SECTION ===== */
+.stickySection {
+  position: relative;
+  height: 300vh;
+  /* Scroll space for the horizontal movement */
   background: var(--bg-color);
 }
 
-.valuesGrid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  background: var(--border-color);
-  /* Grid lines trick */
-  border: 1px solid var(--border-color);
+.stickyHeader {
+  position: absolute;
+  top: 5rem;
+  left: var(--page-padding);
+  z-index: 10;
+}
+
+.stickyHeader h2 {
+  font-family: var(--font-heading);
+  font-size: 3rem;
+  color: var(--accent-color);
+  text-transform: uppercase;
+}
+
+.stickyContainer {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.horizontalScroll {
+  display: flex;
+  gap: 4rem;
+  padding-left: 5vw;
+  /* Start slightly offset */
 }
 
 .valueCard {
-  background: var(--bg-color);
+  min-width: 600px;
+  height: 50vh;
+  background: var(--card-bg);
   padding: 4rem;
-  transition: background 0.3s;
+  border: 1px solid var(--border-color);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  transition: transform 0.3s;
 }
 
 .valueCard:hover {
-  background: var(--card-bg);
+  background: rgba(255, 255, 255, 0.03);
+  border-color: var(--accent-color);
 }
 
 .valueIcon {
   color: var(--accent-color);
-  margin-bottom: 2.5rem;
+  margin-bottom: 2rem;
 }
 
 .valueTitle {
   font-family: var(--font-heading);
-  font-size: 2rem;
-  font-weight: 400;
+  font-size: 3rem;
   margin-bottom: 1.5rem;
 }
 
 .valueDesc {
   font-family: var(--font-body);
-  font-size: 1.1rem;
+  font-size: 1.25rem;
   color: var(--text-muted);
-  line-height: 1.7;
+  line-height: 1.6;
 }
 
 /* ===== CTA SECTION ===== */

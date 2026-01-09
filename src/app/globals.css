@@ -1,6 +1,7 @@
 :root {
   /* Colors - Ethereal Luxury (Dark Theme Default) */
   --bg-color: #050505;
+  --bg-rgb: 5, 5, 5;
   --text-color: #e0e0e0;
   --accent-color: #d4af37;
   /* Champagne Gold */
@@ -24,6 +25,7 @@
 /* Light Theme - Warm Luxury */
 [data-theme="light"] {
   --bg-color: #faf8f5;
+  --bg-rgb: 250, 248, 245;
   --text-color: #1a1a1a;
   --accent-color: #b8960c;
   --accent-secondary: #9a7d0a;
