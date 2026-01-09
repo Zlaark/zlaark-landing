@@ -114,6 +114,8 @@
   border-radius: 50%;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 20px rgba(255, 255, 255, 0.02);
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 [data-theme="light"] .lensRing {
@@ -196,8 +198,10 @@
 .fluxBlob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(20px);
+  filter: blur(10px);
   mix-blend-mode: screen;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 [data-theme="light"] .fluxBlob {
@@ -243,6 +247,8 @@
   border-top-color: var(--accent-color);
   animation: spin 2s linear infinite;
   box-shadow: 0 0 30px rgba(212, 175, 55, 0.1);
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 [data-theme="light"] .reactorCore {
@@ -282,6 +288,8 @@
   position: absolute;
   bottom: 50px;
   border-radius: 4px;
+  will-change: transform, height;
+  transform: translateZ(0);
 }
 
 .bar1 {

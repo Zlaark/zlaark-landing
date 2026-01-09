@@ -49,6 +49,8 @@
   animation: scroll 30s linear infinite;
   gap: 6rem;
   padding-left: 6rem;
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .logoItem {

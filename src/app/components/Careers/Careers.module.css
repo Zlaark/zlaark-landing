@@ -35,6 +35,8 @@
   cursor: pointer;
   transition: all 0.3s;
   backdrop-filter: blur(10px);
+  will-change: transform;
+  transform: translateZ(0);
 }
 
 .ctaButton:hover {
