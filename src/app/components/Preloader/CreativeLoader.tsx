@@ -61,7 +61,6 @@ export default function CreativeLoader({ onComplete }: { onComplete: () => void 
 
   return (
     <AnimatePresence>
-      {phase !== 'void' && (
         <motion.div className={styles.loaderContainer}>
             
           {/* CURTAINS (For cleanup/exit) */}
@@ -116,7 +115,6 @@ export default function CreativeLoader({ onComplete }: { onComplete: () => void 
 
           </motion.div>
         </motion.div>
-      )}
     </AnimatePresence>
   );
 }
