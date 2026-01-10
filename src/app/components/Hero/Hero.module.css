@@ -69,12 +69,20 @@
   padding: 2rem var(--page-padding);
   display: flex;
   justify-content: space-between;
+  align-items: center;
   mix-blend-mode: difference;
   z-index: 10;
   font-family: var(--font-body);
   text-transform: uppercase;
   font-size: 0.8rem;
   letter-spacing: 0.1rem;
+}
+
+.logo {
+  height: auto;
+  width: auto;
+  max-height: 24px;
+  object-fit: contain;
 }
 
 @media (max-width: 768px) {

@@ -167,6 +167,8 @@
 /* Parallax Rotate Wrapper */
 .parallaxRotateWrapper {
   width: 100%;
+  max-width: 250px;
+  margin: 0 auto;
   transform-origin: center center;
   will-change: transform;
 }
