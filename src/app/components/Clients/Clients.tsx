@@ -3,7 +3,7 @@
 import styles from './Clients.module.css';
 
 const logos = [
-  "Microsoft", "Netflix", "Uber", "Spotify", "Nike", "Apple", "Google", "Amazon", "Tesla", "Airbnb"
+  "MendingMind", "GESSURE", "Skoal", "UNEXT DOOR", "Dhawada", "Sourcing Screen", "Fenkmat", "YoHR Consultancy", "Shivai Telered", 
 ];
 
 export default function Clients() {

@@ -9,19 +9,19 @@ import styles from './Testimonials.module.css';
 
 const reviews = [
   {
-    text: "Zlaark didn't just build a website; they built a digital cathedral. Our conversion rates doubled, but more importantly, our brand perception skyrocketed.",
-    author: "Alexander V.",
-    role: "CEO, FinTech Global"
+    text: "Highly recommend Zlaark — fast delivery, excellent quality, clear communication, and great value. My go-to team for future web projects.",
+    author: "Raja Arsalaan",
+    role: "CEO, SW Build"
   },
   {
-    text: "The level of engineering precision combined with artistic direction is unlike anything we've seen. A true partner in every sense.",
-    author: "Sarah J.",
-    role: "Founder, Luxe AI"
+    text: "Shoutout to Zlaark Amazing work, fast delivery, and great attention to detail. Highly recommended!",
+    author: "Shiv Pratap Singh Dangi",
+    role: "Founder, Sourcing Screen"
   },
   {
-    text: "Seamless, fast, and impossibly beautiful. They turned our chaotic vision into a structured masterpiece.",
-    author: "Marcus Ray",
-    role: "Director, Ray & Sons"
+    text: "I highly recommend Zlaark for their professionalism, quality work, and reliable delivery. A great development partner.",
+    author: "Sai Kiran",
+    role: "Founder, GESSURE"
   }
 ];
 
