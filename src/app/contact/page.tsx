@@ -23,16 +23,16 @@ const budgets = [
   '$60k+'
 ];
 
-const CustomDropdown = ({ 
-  options, 
-  value, 
-  onChange, 
-  placeholder, 
-  label 
-}: { 
-  options: string[], 
-  value: string, 
-  onChange: (val: string) => void, 
+const CustomDropdown = ({
+  options,
+  value,
+  onChange,
+  placeholder,
+  label
+}: {
+  options: string[],
+  value: string,
+  onChange: (val: string) => void,
   placeholder: string,
   label: string
 }) => {
@@ -44,15 +44,15 @@ const CustomDropdown = ({
       <span className={`${styles.customLabel} ${(value || isOpen) ? styles.active : ''}`}>
         {label}
       </span>
-      
-      <div 
-        className={styles.customSelectTrigger} 
+
+      <div
+        className={styles.customSelectTrigger}
         onClick={() => setIsOpen(!isOpen)}
         tabIndex={0}
         onBlur={() => setTimeout(() => setIsOpen(false), 200)}
       >
         {value || <span className={styles.placeholder}>{placeholder}</span>}
-        <motion.span 
+        <motion.span
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.2 }}
           style={{ marginLeft: 'auto', opacity: 0.5 }}
@@ -61,7 +61,7 @@ const CustomDropdown = ({
         </motion.span>
       </div>
 
-      <motion.div 
+      <motion.div
         className={styles.customOptions}
         initial={false}
         animate={isOpen ? "open" : "closed"}
@@ -72,8 +72,8 @@ const CustomDropdown = ({
         transition={{ duration: 0.2 }}
       >
         {options.map((option) => (
-          <div 
-            key={option} 
+          <div
+            key={option}
             className={styles.optionItem}
             onClick={() => {
               onChange(option);
@@ -149,7 +149,7 @@ export default function ContactPage() {
 
   return (
     <main className={styles.page}>
-      
+
       {/* Creative Background Effect */}
       <div className={styles.ambientLight} />
 
@@ -158,11 +158,11 @@ export default function ContactPage() {
         <div className={styles.leftPanel}>
           {/* Particles constrained to left panel area */}
           <div className={styles.particlesContainer}>
-             <FloatingParticles count={20} />
+            <FloatingParticles count={20} />
           </div>
 
           <div className={styles.headerContent}>
-            <motion.span 
+            <motion.span
               className={styles.label}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -170,23 +170,23 @@ export default function ContactPage() {
             >
               Get in Touch
             </motion.span>
-            
+
             <h1 className={styles.heroTitle}>
               <motion.div initial={{ y: '100%', opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}>
                 Let's Create
               </motion.div>
-              <motion.div 
+              <motion.div
                 className={styles.outline}
-                initial={{ y: '100%', opacity: 0 }} 
-                animate={{ y: 0, opacity: 1 }} 
+                initial={{ y: '100%', opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
               >
                 Something
               </motion.div>
-              <motion.div 
+              <motion.div
                 className={styles.highlight}
-                initial={{ y: '100%', opacity: 0 }} 
-                animate={{ y: 0, opacity: 1 }} 
+                initial={{ y: '100%', opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
               >
                 Extraordinary
@@ -194,7 +194,7 @@ export default function ContactPage() {
             </h1>
           </div>
 
-          <motion.div 
+          <motion.div
             className={styles.contactDetails}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -204,12 +204,13 @@ export default function ContactPage() {
               <h3>New Business</h3>
               <a href="mailto:hello@zlaark.com" className={styles.magneticLink}>hello@zlaark.com</a>
             </div>
-            
+
             <div className={styles.infoBlock}>
               <h3>Socials</h3>
               <div className={styles.socialLinks}>
-                <a href="#" className={styles.socialLink}>LinkedIn <ArrowUpRight size={14} /></a>
-                <a href="#" className={styles.socialLink}>Twitter <ArrowUpRight size={14} /></a>
+                <a href="https://www.linkedin.com/company/zlaark" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>LinkedIn <ArrowUpRight size={14} /></a>
+                <a href="https://www.instagram.com/zlaark/" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>Instagram <ArrowUpRight size={14} /></a>
+                <a href="https://chat.whatsapp.com/IZ0s8MwAJ1v3SQWn77A6PT" target="_blank" rel="noopener noreferrer" className={styles.socialLink}>Community <ArrowUpRight size={14} /></a>
               </div>
             </div>
           </motion.div>
@@ -218,7 +219,7 @@ export default function ContactPage() {
         {/* RIGHT - Form Panel */}
         <div className={styles.rightPanel}>
           {!isSubmitted ? (
-            <motion.form 
+            <motion.form
               className={styles.form}
               onSubmit={handleSubmit}
               initial={{ opacity: 0, x: 20 }}
@@ -246,7 +247,7 @@ export default function ContactPage() {
                   </label>
                   <span className={styles.inputLine} />
                 </div>
-                
+
                 <div className={styles.inputGroup}>
                   <input
                     type="email"
@@ -285,21 +286,21 @@ export default function ContactPage() {
               {/* Custom Selects Row */}
               <div className={styles.formRow}>
                 <div style={{ flex: 1 }}>
-                  <CustomDropdown 
-                     options={services}
-                     value={formState.service}
-                     onChange={(val) => setFormState(s => ({ ...s, service: val }))}
-                     placeholder="Select Service"
-                     label="Service Interest"
+                  <CustomDropdown
+                    options={services}
+                    value={formState.service}
+                    onChange={(val) => setFormState(s => ({ ...s, service: val }))}
+                    placeholder="Select Service"
+                    label="Service Interest"
                   />
                 </div>
                 <div style={{ flex: 1 }}>
-                  <CustomDropdown 
-                     options={budgets}
-                     value={formState.budget}
-                     onChange={(val) => setFormState(s => ({ ...s, budget: val }))}
-                     placeholder="Select Range"
-                     label="Budget Range"
+                  <CustomDropdown
+                    options={budgets}
+                    value={formState.budget}
+                    onChange={(val) => setFormState(s => ({ ...s, budget: val }))}
+                    placeholder="Select Range"
+                    label="Budget Range"
                   />
                 </div>
               </div>
@@ -330,7 +331,7 @@ export default function ContactPage() {
 
             </motion.form>
           ) : (
-            <motion.div 
+            <motion.div
               className={styles.successState}
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -340,7 +341,7 @@ export default function ContactPage() {
               </div>
               <h2>Message Sent</h2>
               <p>Thank you for reaching out. We'll be in touch within 24 hours.</p>
-              <button 
+              <button
                 className={styles.resetButton}
                 onClick={() => {
                   setIsSubmitted(false);

@@ -14,7 +14,7 @@ const allProjects = [
     title: 'GESSURE',
     category: 'Mobile, Web',
     year: '2025',
-    image: '/gessure.png',
+    image: '/g-mockup.png',
     color: '#16213e',
   },
   {
@@ -38,7 +38,7 @@ const allProjects = [
     title: 'VARAAKIE',
     category: 'Web, E-Commerce',
     year: '2025',
-    image: '/vaarakie.png',
+    image: '/v-mockup.png',
     color: '#0f3460',
   },
   {
@@ -46,7 +46,7 @@ const allProjects = [
     title: 'SKOAL',
     category: 'Web',
     year: '2025',
-    image: '/skoal.png',
+    image: '/s-mockup.png',
     color: '#1a1a2e',
   },
   {
@@ -54,7 +54,7 @@ const allProjects = [
     title: 'ASSURE QAI',
     category: 'Web',
     year: '2025',
-    image: '/assure.png',
+    image: '/a-mockup.png',
     color: '#16213e',
   },
   // {

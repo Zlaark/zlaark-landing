@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
@@ -25,7 +26,7 @@ export default function Navbar() {
   const containerRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const { theme } = useTheme();
-  
+
   const isHomePage = pathname === '/';
 
   useEffect(() => {
@@ -41,7 +42,7 @@ export default function Navbar() {
         setIsVisible(window.scrollY > 100);
       }
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isHomePage]);
@@ -67,7 +68,7 @@ export default function Navbar() {
         animate={{ y: isVisible ? 0 : -100 }}
         transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
       >
-        <div 
+        <div
           ref={containerRef}
           className={styles.container}
           onMouseMove={handleMouseMove}
@@ -75,30 +76,15 @@ export default function Navbar() {
           {/* Spotlight Border Layer */}
           <div className={styles.spotlight} />
 
-          <Link href="/" className={styles.logo} style={{ color: logoColor }}>
-            <AnimatePresence mode="wait">
-              {isScrolled ? (
-                <motion.span
-                  key="Z"
-                  initial={{ opacity: 0, scale: 0.8, x: -10 }}
-                  animate={{ opacity: 1, scale: 1, x: 0 }}
-                  exit={{ opacity: 0, scale: 0.8, x: 10 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  Z
-                </motion.span>
-              ) : (
-                <motion.span
-                  key="ZLAARK"
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.3 }}
-                >
-                  ZLAARK
-                </motion.span>
-              )}
-            </AnimatePresence>
+
+          <Link href="/" className={styles.logo}>
+            <Image
+              src="/icon_white_transparent.png"
+              alt="Zlaark"
+              width={32}
+              height={32}
+              className={styles.logoIcon}
+            />
           </Link>
 
           {/* Desktop Menu */}
@@ -166,13 +152,13 @@ export default function Navbar() {
                 </motion.div>
               ))}
             </div>
-            
-            <motion.div 
-               className={styles.mobileDecorator}
-               initial={{ scaleX: 0 }}
-               animate={{ scaleX: 1 }}
-               transition={{ duration: 0.8, delay: 0.2 }}
-               style={{ background: '#d4af37' }}
+
+            <motion.div
+              className={styles.mobileDecorator}
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ duration: 0.8, delay: 0.2 }}
+              style={{ background: '#d4af37' }}
             />
           </motion.div>
         )}

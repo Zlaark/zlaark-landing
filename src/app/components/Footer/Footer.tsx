@@ -7,7 +7,7 @@ import styles from './Footer.module.css';
 
 export default function Footer() {
     const [time, setTime] = useState("");
-    
+
     // Magnetic Button Logic
     const buttonRef = useRef<HTMLAnchorElement>(null);
     const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -17,11 +17,11 @@ export default function Footer() {
         const { left, top, width, height } = buttonRef.current!.getBoundingClientRect();
         const centerX = left + width / 2;
         const centerY = top + height / 2;
-        
+
         // Calculate distance from center
         const x = (clientX - centerX) * 0.3; // Magnet strength
         const y = (clientY - centerY) * 0.3;
-        
+
         setPosition({ x, y });
     }
 
@@ -41,14 +41,14 @@ export default function Footer() {
     return (
         <footer className={styles.footer} id="contact">
             <div className={styles.bgGradient} />
-            
+
             <div className={styles.contentWrapper}>
-                
+
                 {/* HERO CTA */}
                 <div className={styles.ctaSection}>
                     <span className={styles.ctaLabel}>Have an Idea?</span>
-                    
-                    <motion.h1 
+
+                    <motion.h1
                         className={styles.giantText}
                         initial={{ opacity: 0, y: 100 }}
                         whileInView={{ opacity: 1, y: 0 }}
@@ -58,12 +58,12 @@ export default function Footer() {
                         LET'S TALK
                     </motion.h1>
 
-                    <motion.div 
+                    <motion.div
                         className={styles.buttonWrapper}
                         animate={{ x: position.x, y: position.y }}
                         transition={{ type: "spring", stiffness: 150, damping: 15 }}
                     >
-                        <a 
+                        <a
                             href="mailto:hello@zlaark.com"
                             className={styles.magButton}
                             ref={buttonRef}
@@ -80,14 +80,13 @@ export default function Footer() {
                     <div className={styles.col}>
                         <h4>Socials</h4>
                         <div className={styles.linkList}>
-                            <a href="#" className={styles.footerLink}>LinkedIn</a>
-                            <a href="#" className={styles.footerLink}>Instagram</a>
-                            <a href="#" className={styles.footerLink}>Twitter / X</a>
-                            <a href="#" className={styles.footerLink}>Behance</a>
+                            <a href="https://www.linkedin.com/company/zlaark" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>LinkedIn</a>
+                            <a href="https://www.instagram.com/zlaark/" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>Instagram</a>
+                            <a href="https://chat.whatsapp.com/IZ0s8MwAJ1v3SQWn77A6PT" target="_blank" rel="noopener noreferrer" className={styles.footerLink}>Community</a>
                         </div>
                     </div>
 
-                     <div className={styles.col}>
+                    <div className={styles.col}>
                         <h4>Navigation</h4>
                         <div className={styles.linkList}>
                             <a href="#home" className={styles.footerLink}>Home</a>
@@ -97,15 +96,15 @@ export default function Footer() {
                         </div>
                     </div>
 
-                     <div className={styles.col}>
+                    <div className={styles.col}>
                         <h4>Local Time</h4>
                         <div className={styles.timeLocation}>
-                            {time || "Loading..."}<br/>
-                            Amritsar, India<br/>
+                            {time || "Loading..."}<br />
+                            Amritsar, India<br />
                             <span style={{ fontSize: '1rem', color: 'var(--text-muted)' }}>31.6340° N, 74.8723° E</span>
                         </div>
                     </div>
-                    
+
                     <div className={styles.copyRow}>
                         <span>© 2025 Zlaark Agency</span>
                         <span>Privacy Policy</span>
