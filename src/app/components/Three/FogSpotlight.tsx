@@ -6,6 +6,9 @@ import * as THREE from 'three';
 import { fogVertexShader, fogFragmentShader } from './shaders/fogShaders';
 import { useTheme } from '../../context/ThemeContext';
 
+// Global mouse position tracker (normalized 0-1)
+const mousePosition = { x: 0.5, y: 0.5 };
+
 const FogMesh = ({ isDarkMode }: { isDarkMode: boolean }) => {
   const meshRef = useRef<THREE.Mesh>(null);
   const { size, viewport } = useThree();
@@ -20,6 +23,17 @@ const FogMesh = ({ isDarkMode }: { isDarkMode: boolean }) => {
     []
   );
 
+  // Track mouse position globally to avoid R3F pointer stale state issues
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      mousePosition.x = e.clientX / window.innerWidth;
+      mousePosition.y = 1 - (e.clientY / window.innerHeight); // Flip Y for WebGL coordinates
+    };
+
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
   useEffect(() => {
     uniforms.uResolution.value.set(size.width, size.height);
   }, [size, uniforms]);
@@ -29,12 +43,9 @@ const FogMesh = ({ isDarkMode }: { isDarkMode: boolean }) => {
     uniforms.uIsDarkMode.value = isDarkMode ? 1.0 : 0.0;
   }, [isDarkMode, uniforms]);
 
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (meshRef.current) {
       uniforms.uTime.value = state.clock.getElapsedTime();
-      
-      const targetX = (state.pointer.x + 1) / 2;
-      const targetY = (state.pointer.y + 1) / 2;
 
       // Mobile Override: Force light to center
       if (size.width < 768) {
@@ -42,9 +53,9 @@ const FogMesh = ({ isDarkMode }: { isDarkMode: boolean }) => {
         uniforms.uMouse.value.x += (0.7 - uniforms.uMouse.value.x) * 0.05;
         uniforms.uMouse.value.y += (0.75 - uniforms.uMouse.value.y) * 0.05;
       } else {
-        // Desktop: Follow mouse with smooth lerp
-        uniforms.uMouse.value.x += (targetX - uniforms.uMouse.value.x) * 0.12;
-        uniforms.uMouse.value.y += (targetY - uniforms.uMouse.value.y) * 0.12;
+        // Desktop: Follow global mouse with smooth lerp (faster response)
+        uniforms.uMouse.value.x += (mousePosition.x - uniforms.uMouse.value.x) * 0.15;
+        uniforms.uMouse.value.y += (mousePosition.y - uniforms.uMouse.value.y) * 0.15;
       }
 
       // Throttle CSS variable updates (every 3rd frame ~20fps is enough for CSS)

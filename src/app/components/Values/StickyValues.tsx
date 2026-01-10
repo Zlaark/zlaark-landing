@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence, useMotionValue, useTransform, useSpring } from 'framer-motion';
 import { Target, Zap, Globe, ShieldCheck } from 'lucide-react';
 import GradientBlob from '../Effects/GradientBlob';
@@ -41,8 +41,8 @@ const values = [
   }
 ];
 
-const Card = ({ item, activeId, setActiveId }: { item: any, activeId: number | null, setActiveId: (id: number) => void }) => {
-    const isActive = activeId === item.id;
+const Card = ({ item, activeId, setActiveId, isMobile }: { item: any, activeId: number | null, setActiveId: (id: number | null) => void, isMobile: boolean }) => {
+    const isActive = isMobile || activeId === item.id;
     
     // Parallax Logic
     const x = useMotionValue(0);
@@ -51,7 +51,7 @@ const Card = ({ item, activeId, setActiveId }: { item: any, activeId: number | n
     const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-15, 15]), { stiffness: 150, damping: 20 });
 
     const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!isActive) return;
+        if (!isActive || isMobile) return;
         const rect = e.currentTarget.getBoundingClientRect();
         const width = rect.width;
         const height = rect.height;
@@ -63,13 +63,19 @@ const Card = ({ item, activeId, setActiveId }: { item: any, activeId: number | n
         y.set(yPct);
     };
 
+    const handleClick = () => {
+        if (isMobile) return; // On mobile, all cards are always expanded
+        setActiveId(item.id);
+    };
+
     return (
         <motion.div
             className={`${styles.card} ${item.theme}`}
-            layout
+            layout={!isMobile}
             initial={false}
-            animate={{ flex: isActive ? 3 : 1 }}
-            onHoverStart={() => setActiveId(item.id)}
+            animate={isMobile ? {} : { flex: activeId === item.id ? 3 : 1 }}
+            onHoverStart={() => !isMobile && setActiveId(item.id)}
+            onClick={handleClick}
             onMouseMove={handleMouseMove}
             onMouseLeave={() => { x.set(0); y.set(0); }}
             transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -133,6 +139,15 @@ const Card = ({ item, activeId, setActiveId }: { item: any, activeId: number | n
 
 export default function StickyValues() {
   const [activeId, setActiveId] = useState<number | null>(1);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // Detect mobile screen size
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   return (
     <section className={styles.section}>
@@ -149,7 +164,7 @@ export default function StickyValues() {
 
       <div className={styles.container}>
         {values.map((item) => (
-            <Card key={item.id} item={item} activeId={activeId} setActiveId={setActiveId} />
+            <Card key={item.id} item={item} activeId={activeId} setActiveId={setActiveId} isMobile={isMobile} />
         ))}
       </div>
     </section>
