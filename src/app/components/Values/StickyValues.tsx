@@ -132,6 +132,12 @@ const Card = ({ item, activeId, setActiveId, isMobile }: { item: any, activeId: 
                         </motion.div>
                     )}
                 </AnimatePresence>
+                
+                {/* Mobile fallback - always render content, use CSS to show/hide */}
+                <div className={styles.mobileContent}>
+                    <h3 className={styles.cardTitle}>{item.title}</h3>
+                    <p className={styles.cardDesc}>{item.desc}</p>
+                </div>
             </div>
         </motion.div>
     );

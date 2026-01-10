@@ -59,6 +59,11 @@
   background: var(--border-color);
 }
 
+/* Mobile content fallback - hidden on desktop */
+.mobileContent {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .section {
     padding: 3rem var(--page-padding);
@@ -118,10 +123,15 @@
     transform: scale(0.75);
   }
 
-  /* Content always displayed on mobile */
+  /* Hide animated content on mobile - use mobileContent instead */
   .content {
-    margin-top: 0;
+    display: none !important;
+  }
+
+  /* Show mobile fallback content */
+  .mobileContent {
     display: block !important;
+    margin-top: 0.5rem;
   }
 
   .cardTitle {
