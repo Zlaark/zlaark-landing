@@ -5,7 +5,7 @@ import { useFrame, useThree } from '@react-three/fiber';
 import { Text } from '@react-three/drei';
 import * as THREE from 'three';
 
-function Ring({ text, radius, speed, y, color }: { text: string; radius: number; speed: number; y: number; color: string }) {
+function Ring({ text, radius, speed, y, color, fontSize }: { text: string; radius: number; speed: number; y: number; color: string; fontSize: number }) {
     const groupRef = useRef<THREE.Group>(null);
     
     // Repeat text to fill the circle roughly
@@ -13,7 +13,7 @@ function Ring({ text, radius, speed, y, color }: { text: string; radius: number;
     // Assume char width ~ 0.5 units
     // approximate chars needed:
     const circumference = 2 * Math.PI * radius;
-    const charsFit = Math.floor(circumference / 0.8); // rough spacing
+    const charsFit = Math.floor(circumference / (0.8 * (fontSize / 1.2))); // scale spacing with font size
     const repeatCount = Math.ceil(charsFit / text.length);
     const fullText = Array(repeatCount).fill(text).join(" • ");
     
@@ -51,7 +51,7 @@ function Ring({ text, radius, speed, y, color }: { text: string; radius: number;
                     key={i}
                     position={[item.x, 0, item.z]}
                     rotation={[0, item.rotY, 0]}
-                    fontSize={1.2}
+                    fontSize={fontSize}
                     color={color}
                     anchorX="center"
                     anchorY="middle"
@@ -64,25 +64,38 @@ function Ring({ text, radius, speed, y, color }: { text: string; radius: number;
 }
 
 export default function KineticRings({ isDarkMode }: { isDarkMode: boolean }) {
+    const { viewport } = useThree();
+    
+    // Scale based on viewport width - smaller on mobile
+    const isMobile = viewport.width < 10; // Approximate threshold for mobile
+    const scale = isMobile ? 0.55 : 1;
+    
+    const ringRadius = 8 * scale;
+    const fontSize = 1.2 * scale;
+    const sphereRadius = 4 * scale;
+    const ringY = 1.5 * scale;
+
     return (
         <group rotation={[0, 0, 0.1]}> {/* Slight tilt */}
             <Ring 
                 text="JOIN THE VANGUARD" 
-                radius={8} 
+                radius={ringRadius} 
                 speed={0.2} 
-                y={1.5} 
+                y={ringY} 
                 color={isDarkMode ? "#ffffff" : "#1a1a1a"}
+                fontSize={fontSize}
             />
             <Ring 
                 text="BUILD THE FUTURE" 
-                radius={8} 
+                radius={ringRadius} 
                 speed={-0.2} 
-                y={-1.5} 
+                y={-ringY} 
                 color="#d4af37" // Gold
+                fontSize={fontSize}
             />
              {/* Center decorative line or core? */}
              <mesh position={[0, 0, 0]}>
-                <sphereGeometry args={[4, 32, 32]} />
+                <sphereGeometry args={[sphereRadius, 32, 32]} />
                 <meshStandardMaterial 
                     color={isDarkMode ? "#000" : "#fff"} 
                     emissive={isDarkMode ? "#111" : "#ccc"} 
@@ -93,3 +106,4 @@ export default function KineticRings({ isDarkMode }: { isDarkMode: boolean }) {
         </group>
     );
 }
+

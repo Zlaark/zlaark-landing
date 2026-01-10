@@ -87,23 +87,27 @@
 
   .card {
     border-radius: 12px;
-    min-height: 80px;
+    min-height: auto;
     height: auto !important;
     flex: none !important;
   }
 
   .cardInner {
     position: relative;
-    padding: 1.5rem;
-    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.6) 100%);
+    padding: 1.25rem;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%);
   }
 
   [data-theme="light"] .cardInner {
-    background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.7) 100%);
+    background: linear-gradient(to bottom, transparent 0%, rgba(255, 255, 255, 0.8) 100%);
   }
 
   .topRow {
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.75rem;
   }
 
   .number {
@@ -111,49 +115,52 @@
   }
 
   .icon {
-    transform: scale(0.8);
+    transform: scale(0.75);
   }
 
+  /* Content always displayed on mobile */
   .content {
-    margin-top: 0.5rem;
+    margin-top: 0;
+    display: block !important;
   }
 
   .cardTitle {
-    font-size: 1.5rem;
-    margin-bottom: 0.75rem;
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
     white-space: normal;
+    font-weight: 500;
   }
 
   .cardDesc {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     line-height: 1.5;
-    padding-top: 0.75rem;
+    padding-top: 0.5rem;
     max-width: 100%;
+    border-top-color: rgba(255, 255, 255, 0.1);
   }
 
-  /* Collapsed card spine - horizontal on mobile */
+  [data-theme="light"] .cardDesc {
+    border-top-color: rgba(0, 0, 0, 0.1);
+  }
+
+  /* Hide spine completely on mobile since content is always shown */
   .spine {
-    position: static;
-    transform: none;
-    width: 100%;
-    height: auto;
-    flex-direction: row;
-    padding: 0;
-    gap: 0;
+    display: none !important;
   }
 
   .verticalText {
-    writing-mode: horizontal-tb;
-    transform: none;
-    font-size: 1.1rem;
-    color: var(--text-color);
-    opacity: 0.9;
-    letter-spacing: 0.1rem;
+    display: none;
   }
 
   /* Sheen effect disabled on mobile for performance */
   .sheen {
     display: none;
+  }
+
+  /* Reduce silk layer animation on mobile */
+  .silkLayer {
+    animation: none !important;
+    opacity: 0.6 !important;
   }
 }
 
