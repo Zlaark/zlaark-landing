@@ -23,8 +23,8 @@ const IMG_URLS = [
     "/ourwork.png",
     "/unextdoor.png",
     "/gessure.png",
-    "https://picsum.photos/id/48/800/600",
-    "https://picsum.photos/id/56/800/600",
+    "/vaarakie.png",
+    "/skoal.png",
 ];
 
 function ProjectItem({ position, rotation, url, title, subtitle, index, zProgress, isDarkMode, hideText }: ProjectProps) {
@@ -80,8 +80,8 @@ export default function TunnelGallery({ scrollProgress, isDarkMode }: { scrollPr
         { title: "Venture Core", pos: [-3, 0, 0], rot: [0, 0.2, 0] },
         { title: "UNEXT DOOR", subtitle: "AI LANGUAGE TUTOR", pos: [3, 0, -10], rot: [0, -0.2, 0] },
         { title: "GESSURE", subtitle: "India’s Next-Gen\nProfessional Networking Platform.", pos: [-3, 0, -20], rot: [0, 0.2, 0] },
-        { title: "Lumina Gallery", pos: [3, 0, -30], rot: [0, -0.2, 0] },
-        { title: "Quant X", pos: [-3, 0, -40], rot: [0, 0.2, 0] },
+        { title: "VARAAKIE", subtitle: "Varaakie — modern fashion for\n effortless everyday style.", pos: [3, 0, -30], rot: [0, -0.2, 0] },
+        { title: "SKOAL", subtitle: "Skoal Solutions is a global HRand payroll\n platform that simplifies workforce management", pos: [-3, 0, -40], rot: [0, 0.2, 0] },
     ], []);
 
     useFrame((state, delta) => {
